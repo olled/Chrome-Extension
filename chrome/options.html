@@ -1,0 +1,84 @@
+<html>
+<head><title>Projectplace Login Options</title>
+<link rel="stylesheet" media="all" href="options.css" type="text/css" />
+<script language="javascript" type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript">
+
+/* 
+	Saves options to localStorage.
+*/
+function save() {
+  
+  localStorage["email"] = document.getElementById("email").value;
+  localStorage["pwd"] = document.getElementById("pwd").value;
+  localStorage["checkfornotification"] = document.getElementById("checkfornotification").checked;
+
+  // Update status to let user know options were saved.
+  var status = document.getElementById("status");
+  status.innerHTML = "Options Saved.";
+  setTimeout(function() {
+    status.innerHTML = "";
+  }, 750);
+  
+}
+function flyOut()
+{
+	$('#contentDiv').addClass('flyOut')
+}
+/* 
+	Restores with saved value from localStorage.
+*/
+function readOptions() {
+  var email = localStorage["email"];
+  var pwd = localStorage["pwd"];
+  var notification = (localStorage["checkfornotification"] == 'true'? 'checked':'');
+  
+  document.getElementById('email').value = email;
+  document.getElementById('pwd').value = pwd;  
+
+  document.getElementById('checkfornotification').checked = notification
+}
+</script>
+</head>
+<body onload="readOptions()">
+<div id="contentDiv"> 
+  <div class="content" id="chPwd"> 
+    <div class="frame form"> 
+ 
+	   <div class="group"> 
+        <p class="title"></p> 
+        <div class="data" id="status"> 
+          <p></p> 
+        </div> 
+      </div> 
+ 	<h4>Please enter you email and password <sup>*</sup></h4> 
+      <div class="group"> 
+        <label for="permissive_pwd_old">Username(email):</label> 
+        <input type="text" class="text required" name="email" id="email" width="30" /> 
+      </div> 
+ 
+      <div class="group"> 
+        <label for="permissive_pwd_old">Password:</label> 
+        <input type="password" class="text required" name="pwd" id="pwd" width="30" />  
+      </div> 
+        <div class="group"> 
+        <label for="checkfornotification">Enabled notifications:</label> 
+        <input type="checkbox" class="checkbox" name="checkfornotification" id="checkfornotification" />  
+        <p class="descr">Show number of unread Conversations from all projects as a label on the Projectplace button</p>
+      </div> 
+    
+    </div> 
+
+    </div> 
+    <div class="buttons"> 
+      <input type="button" class="button" name="apply" id="apply" value="Save" onclick="save();"> 
+      <input type="button" class="button" name="cancel" id="cancel" value="Cancel" onclick="window.close();"> 
+    </div> 
+  </div> 
+  <p class="description"><span><sup>*</sup>Saved in Local Storage on your computer!!</span></p>
+</div> 
+
+
+
+</body>
+</html>
