@@ -1,0 +1,26 @@
+<html>
+	
+	<head>
+		
+		<script language="javascript" type="text/javascript">
+			
+			(function(){
+				var localURL = window.location.href;
+				console.log(localURL);
+				var oauthToken = localURL.split('oauth_token=');
+					oauthToken = oauthToken[1].split('&')[0];
+				var oauthVerifier = localURL.split('oauth_verifier=')[1];
+				localStorage[this.key_token_secret + encodeURI(this.oauth_scope)] = secret;
+				console.log(oauthVerifier);
+				//?oauth_token=78986632de3f6159d42861b8dc579407&oauth_verifier=31bc3e95126bede57d451e075becdb27
+				
+				chrome.extension.sendRequest({
+						target: "saveOauthCredentials"}, 
+						function(response) {});
+			})();
+			
+			
+		</script>
+	</head>
+	<body>It worked</body>
+</html>
