@@ -55,3 +55,15 @@ function parseProjectplaceURL(frameUrl)
 	return obj;
 
 }
+if (document.location.href.indexOf('https://service.projectplace.com/domBlank.html') != -1) {
+	var localURL = window.location.href;
+	var oauthToken = localURL.split('oauth_token=');
+		oauthToken = oauthToken[1].split('&')[0];
+	var oauthVerifier = localURL.split('oauth_verifier=')[1];
+	chrome.extension.sendRequest({
+		target: "saveOauthCredentials",
+		oauthToken: oauthToken,
+		oauthVerifier: oauthVerifier
+	}, function(response){
+	});
+}

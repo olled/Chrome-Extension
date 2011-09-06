@@ -13,7 +13,7 @@
   "permissions": [
     "tabs",
     "notifications",
-    "https://service.projectplace.com/*"
+    "https://api.projectplace.com/*"
   ],
   "content_scripts": [
     {

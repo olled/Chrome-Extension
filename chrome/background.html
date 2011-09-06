@@ -1,7 +1,65 @@
 <html>
 <head>
 <script language="javascript" type="text/javascript" src="jquery.js"></script>
-<script language="javascript" src='projectplace.js' type='text/javascript'></script>
+<!--<script language="javascript" src='projectplace.js' type='text/javascript'></script>-->
+<script type="text/javascript" src="oauth/chrome_ex_oauthsimple.js"></script>
+<script type="text/javascript" src="oauth/chrome_ex_oauth.js"></script>
+<script language="javascript" type="text/javascript">
+	var oauth = ChromeExOAuth.initBackgroundPage({
+	  'request_url': 'https://api.projectplace.com/initiate',
+	  'authorize_url': 'https://api.projectplace.com/authorize',
+	  'access_url': 'https://api.projectplace.com/token',
+	  'consumer_key': 'a5398f2cdfb161f5788b261350068fbc',
+	  'consumer_secret': '76b3226ccb9a17925fae34a631fc28110f8f90d5',
+	  'scope': 'https://api.projectplace.com/1/',
+	  'app_name': 'Projectplace Thing!'
+	});
+	
+
+	function callback(resp, xhr) {
+  		console.log(xhr)
+		console.log(resp)
+	};
+	
+	function onAuthorized(text, tasd)
+	{
+		var url = 'https://api.projectplace.com/1/user/me/coworkers.json';
+		var request = {
+		'method': 'GET'
+		};
+		
+		oauth.sendSignedRequest(url, callback, request);
+	}
+	oauth.authorize(onAuthorized);
+	
+	chrome.extension.onRequest.addListener(
+  function(request, sender, sendResponse) {
+    
+    if (request.greeting == "hello")
+      sendResponse({farewell: "goodbye"});
+    else
+      sendResponse({}); // snub them.
+  });
+	
+	
+	chrome.extension.onRequest.addListener(function (request, sender, sendResponse) {
+        if (request.target) {
+            switch (request.target) {
+                case "saveOauthCredentials": 
+					oauth.getAccessToken(request.oauthToken, request.oauthVerifier,function(){
+						chrome.tabs.getSelected(null, function (tab) {
+						    chrome.tabs.remove(tab.id);
+						});
+					})
+					
+					return;
+            }
+         }
+	});
+	
+	
+	
+</script>
 </head>
 <body>
 </body>
