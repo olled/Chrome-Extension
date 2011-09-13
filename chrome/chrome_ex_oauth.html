@@ -1,27 +1,30 @@
 <!DOCTYPE html>
-<!--
- * Copyright (c) 2009 The Chromium Authors. All rights reserved.  Use of this
- * source code is governed by a BSD-style license that can be found in the
- * LICENSE file.
--->
-<html>
-  <head>
-    <title>OAuth Redirect Page</title>
-    <style type="text/css">
-      body {
-        font: 16px Arial;
-        color: #333;
-      }
-    </style>
-    <script type="text/javascript" src="oauth/chrome_ex_oauthsimple.js"></script>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Redirecting you to Projectplace....</title>
+	<link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Philosopher' rel='stylesheet' type='text/css'>
+
+    <style>
+		body div.hi { font-family: 'Yanone Kaffeesatz', serif; font-size: 100px; text-align:center;}
+		body p{font-family: Philosopher; font-size:20px;}
+	</style>
+
+	<script type="text/javascript" src="oauth/chrome_ex_oauthsimple.js"></script>
     <script type="text/javascript" src="oauth/chrome_ex_oauth.js"></script>
     <script type="text/javascript">
-      function onLoad() {
+      function loadIt() {
         ChromeExOAuth.initCallbackPage();
       };
+	  
+	  window.setTimeout("loadIt()", 2000);
     </script>
   </head>
-  <body onload="onLoad();">
-    Redirecting...
+  <body>
+    <div class="hi">Hold on
+		<p>Sending you to Projectplace for login</p>
+  	</div>
   </body>
 </html>

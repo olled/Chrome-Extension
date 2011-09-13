@@ -1,12 +1,13 @@
 {
   "name": "Projectplace",
-  "version": "1.3",
-  "description": "Auto login for Projectplace.com, now with convesations. This is not an official Projectplace App!",
+  "version": "2.0",
+  "description": "Get your Conversations, Documents, Contacts and Assignments from Projectplace. This is not an official Projectplace App!",
   "browser_action": {
-    "default_icon": "pp.png"
+    "default_icon": "pp.png",
+	"popup": "popup.html"
+	
   },
   "background_page": "background.html",
-  "options_page": "options.html",
   "icons": { "16": "icon-16.png",
            "48": "icon-48.png",
           "128": "icon-128.png" },
@@ -20,6 +21,5 @@
       "matches": ["https://service.projectplace.com/*"],
       "js": ["injected.js"]
     }
-  ]
-  
+  ] 
 }
