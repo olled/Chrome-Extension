@@ -153,7 +153,7 @@ ChromeExOAuth.prototype.sendSignedRequest = function(url, callback,
 
   ChromeExOAuth.sendRequest(method, signedUrl, headers, body, function (xhr) {
     if (xhr.readyState == 4) {
-      callback(xhr.responseText, xhr);
+      return callback(xhr.responseText, xhr);
     }
   });
 };

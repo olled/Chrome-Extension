@@ -20,7 +20,7 @@ ProjectplaceAPICall.prototype.Send = function(call, callback, method){
 	var request = {
 		'method': (method?method:'GET')
 	};
-	oauth.sendSignedRequest(url, callback, request);
+	return oauth.sendSignedRequest(url, callback, request);
 }
 
 /**
@@ -42,6 +42,10 @@ ProjectplaceAPICall.prototype.getMyProfile = function(callback){
 	return this
 }
 
+/**
+ * Get the users favorite projects  
+ * @param {Object} callback - specific callback function to handle the result
+ */
 ProjectplaceAPICall.prototype.getMyFavoriteProjects = function(callback){
 	
 	this.Send(APICALLS.USER.ME.GETMYFAVORITEPROJECTS, callback)
@@ -56,4 +60,14 @@ ProjectplaceAPICall.prototype.getMyFavoriteProjects = function(callback){
 ProjectplaceAPICall.prototype.projectConversations = function(projectId, callback){
 	this.Send(APICALLS.PROJECTS.CONVERSATIONS.replace('PROJECT_ID', projectId),callback);
 	return this
+}
+
+/**
+ * Get specific conversation  
+ * @param {Object} callback - specific callback function to handle the result
+ * @param {String} projectId - specific conversation id.
+ */
+ProjectplaceAPICall.prototype.specificConversation = function(conversationId, callback){
+	return this.Send(APICALLS.CONVERSATIONS.SPECIFICCONVERSATION.replace('CONVERSATION_ID', conversationId),callback);
+	
 }

@@ -21,6 +21,10 @@ var APICALLS = {
 	PROJECTS:{
 		CONVERSATIONS: CONFIG.APIURL+'/project/PROJECT_ID/conversations.json'
 		
+	},
+	CONVERSATIONS: {
+		SPECIFICCONVERSATION: CONFIG.APIURL+'/conversation/CONVERSATION_ID/posts.json'
+		
 	}
 }
 

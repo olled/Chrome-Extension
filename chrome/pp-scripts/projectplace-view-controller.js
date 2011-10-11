@@ -4,36 +4,42 @@
  */
 var PPAPI = new ProjectplaceAPICall();
 
- 
  /**
-  * Constructor
+  * ProjectplaceViewController - gets the data needed for the different views
+  * 	Currently
+  * 	* loadInitialView == Loads the initial data needed, project info, conversations from all projects, user info.
+  * 	
   */
- function ProjectplaceViewController(){
-	return this;
- }
-
-/**
- * Creates the initial view
- * @param {Object} callBack callback function, if any
- */
- ProjectplaceViewController.prototype.loadInitialView = function(callBack){
+ var ProjectplaceViewController = {
+ 	totalNewPosts: 0,
+	user:null,
 	
-	PPAPI.getMyProfile(function(text, xhr){
-		var userInfo = new UserInfo(text);
-		userInfo.getUserName()
+	/**
+	 * Creates the initial view
+	 * @param {Object} callBack callback function, if any
+	 */
+	loadDataInitialView: function(callBack){
 		
-	});
-	
-	PPAPI.getMyProjects(function(text, xhr){
-		var projects = JSON.parse(text);
-		for (var i = 0; i < projects.length; i++) {
-			PPAPI.projectConversations(projects[i].id, function(text, xhr){
-				//console.log(text)
-			});
-		}
-	});
-	
-	
-	
+		
+		PPAPI.getMyProfile(function(text, xhr){
+			ProjectplaceViewController.user = new UserInfo(text);
+		});
+		
+		/**
+		 * Get top 50 conversations for all projects ordered by last modified.
+		 * @param {Object} txt - json text
+		 * @param {Object} xhr - the xhr object
+		 */
+		PPAPI.getMyProjects(function(text, xhr){
+			var projects = JSON.parse(text);
+			for (var i = 0; i < projects.length; i++) {
+				PPAPI.projectConversations(projects[i].id,function(t, xhr){
+					ProjectplaceViewController.user.setConversations(t);
+				}
+				);
+			}
+		});
+		
+		
+	}
  }
-
