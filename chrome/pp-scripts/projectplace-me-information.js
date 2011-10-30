@@ -10,7 +10,8 @@ function UserInfo(jsonText){
 	this.userConvKey = this.userid + '-user-conv';
 	this.userProjects = this.userid + '-projects';
 	this.userTrendingConv = '-trending-conv';
-	this._clearConversationsCache();
+	this.userCoworkers = this.userid +'-coworkers'
+	this._saveOldConversations();
 	this.saveUserJSON(_json);
 }
 
@@ -32,28 +33,81 @@ UserInfo.prototype.saveUserJSON = function(_json){
 	localStorage[this.userKey] = JSON.stringify(_json);
 }
 
-
-UserInfo.prototype.setProject = function(projects){
+/**
+ * Saves all the ids/names of the users projects
+ * @param {Object} projects - jsonObject
+ */
+UserInfo.prototype.saveProjects = function(projects){
 	localStorage[this.userProjects] = JSON.stringify(projects);
 }
+/**
+ * Save all coworkers for user.
+ * @param {Object} coworkers - JSON Object with all coworkers in all projects
+ */
+UserInfo.prototype.saveCoworkers = function(coworkers){
+	localStorage[this.userCoworkers] = JSON.stringify(coworkers);
+}
 
+/**
+ * Returns all coworkers from localstorage.
+ */
+UserInfo.prototype.getCoworkers = function(){
+	JSON.parse(localStorage[this.userCoworkers]);
+}
+
+/**
+ * Returns the JSON Object of a specific user with id matching value.
+ * @param {Object} value - The value to search for in the Coworker JSON Object
+ */
+UserInfo.prototype.getSpecificCoWorker = function(value){
+	
+	var coWorkers = this.getJSONValue(this.userCoworkers);
+	for(var coworker in coWorkers) {
+  		if(coWorkers[coworker].id == value){
+			return coWorkers[coworker];	
+		}
+	}
+	
+	
+	if(this.userid == value){
+		return this.getJSONValue(this.userKey);
+	}
+	return null;
+}
+/**
+ * Returns a single project as a JSON object
+ * @param {Object} projectId - The project id to get
+ */
+UserInfo.prototype.getSpecificProject = function(projectId){
+	var projects = this.getJSONValue(this.userProjects);
+	for(var project in projects) {
+  		if(projects[project].id == projectId){
+			return projects[project];	
+		}
+	}
+	return null;
+}
 /**
  * Called on init(on start of browser) to clear all the conversatsions data saved on client.
  *
  */
-UserInfo.prototype._clearConversationsCache = function(){
-	localStorage.removeItem(this.userConvKey);
+UserInfo.prototype._saveOldConversations = function(){
+	var c = localStorage[this.userConvKey];
+	if (c) {
+		localStorage['-old' + this.userConvKey] = c;
+		localStorage.removeItem(this.userConvKey);
+	} 
+	
 }
+
 /**
  * Saves all conversations with the key this.userConvKey. 
  * Clear the saved data with _clearConversatsionCache
  * @param {Object} jsonText - a specific projects conversations as json in text format.
  */
-
 UserInfo.prototype.setConversations = function(jsonText){
 	var savedConversations = this.getConversations();
 	if (jsonText.indexOf('{') != -1) {
-		
 		var findBeginingOfString = /^\[/;
 		var findEndOfString = /\]$/;
 		jsonText = jsonText.replace(findBeginingOfString, '');
@@ -70,12 +124,13 @@ UserInfo.prototype.setConversations = function(jsonText){
 		}
 		
 		localStorage[this.userConvKey] = jsonText;
+		
 	}
 }
 
 /**
  * Returns all conversations for user or project(projectId)
- * @param {Object} projectId -  Not manadatory, if submitted only return conversatsion for 
+ * @param {Object} projectId -  Not manadatory, if submitted only return conversation for 
  * 								specific project.
  */
 UserInfo.prototype.getConversations = function(projectId){
@@ -90,13 +145,14 @@ UserInfo.prototype.getConversations = function(projectId){
 	}
 }
 /**
- * Returns the conversations object that have the highest post_count attribute
+ * Returns the conversations object id that have the highest post_count attribute
  */
-UserInfo.prototype.getTrendingConversationId = function(){
+UserInfo.prototype.getTrendingConversationOnCommentsId = function(){
 	
 	var highestCount = 0;
 	var conversationsObject = null;
 	var conversations = this.getConversations();
+
 	for (var i = 0; i < conversations.length; i++)
 	{
 		if(conversations[i].post_count > highestCount){
@@ -104,30 +160,117 @@ UserInfo.prototype.getTrendingConversationId = function(){
 			conversationsObject = conversations[i];
 		}
 	}
+	return (conversationsObject ?conversationsObject.id : null);
+	
+}
+/**
+ * Returns the conversations object id that have the highest nr of likes
+ */
+UserInfo.prototype.getTrendingConversationOnLikesId = function(){
+	
+	var highestCount = 0;
+	var conversationsObject = null;
+	var conversations = this.getConversations();
+	
+	
+	for (var i = 0; i < conversations.length; i++)
+	{
+		if (conversations[i].liked_by) {
+			currentCount = 0;
+			for(like in conversations[i].liked_by){
+				currentCount++
+			}
+			currentCount++ // due to start at 0.
+			if (currentCount > highestCount) {
+				highestCount = currentCount;
+				conversationsObject = conversations[i];
+			}
+		}
+	}
 	
 	return (conversationsObject ?conversationsObject.id : null);
 	
 }
-UserInfo.prototype.getTrendingConversationObject = function(convId){
+/**
+ * Save the Trending Conversation to the localstorage
+ * @param {Object} convId - the specific id of the conversation to save
+ */
+UserInfo.prototype.setTrendingConversationObject = function(convId){
 	var apiCall = new ProjectplaceAPICall();
 	apiCall.specificConversation(convId, function(t, xhr){
 		localStorage['-trending-conv'] = t;		
 	});
 }
+/**
+ * Return the Trending Conversation, the conversation in all projects that
+ * has the highest number of comments.
+ */
 UserInfo.prototype.getTrendingConversation = function(){
 	
 	return JSON.parse(localStorage[this.userTrendingConv]);
 }
 
-
+/**
+ * Compares the dates between the saved conversations and the newly gotten and returns the 
+ * number of new items found..
+ */
+UserInfo.prototype.getNewConversationsCount = function(){
+	var oldHighestDate = 0;
+	var numberOfNewPosts = 0;
+	
+	if(!localStorage['-old'+ this.userConvKey]){
+		return 0;
+	}
+	var oldUserConversations = this.getJSONValue('-old'+ this.userConvKey);
+	
+	
+	var newUserConversations = this.getJSONValue(this.userConvKey);
+	
+	
+	for (var i = 0; i < oldUserConversations.length; i++) {
+	
+		if (oldHighestDate < oldUserConversations[i].last_post_time) {
+			oldHighestDate = oldUserConversations[i].last_post_time;
+		}
+	}
+	
+	for(var i = 0; i < newUserConversations.length; i++){
+		if (oldHighestDate < newUserConversations[i].last_post_time){
+			numberOfNewPosts++;
+		}
+	}
+	
+	if (numberOfNewPosts) {
+		setNewBadge(numberOfNewPosts)
+	}
+	return numberOfNewPosts;
+}
+/**
+ * Return the four newest conversations by date
+ */
+UserInfo.prototype.getTopFourConversationsByDate = function(){
+	var topFourConv = new Array();
+	var allConv = this.getJSONValue(this.userConvKey);
+	allConv.sort(sort_by('last_post_time', true, parseInt));
+	
+	topFourConv.push(allConv[0]);
+	topFourConv.push(allConv[1]);
+	topFourConv.push(allConv[2]);
+	topFourConv.push(allConv[3]);
+	
+	return topFourConv;
+}	
 
 /**
  * Returns the values of key from saved JSON Object(jsonKey), if no key we return the complete JSON Object.
+ * @param {Object} jsonKey - the key in localstorage
  * @param {Object} key - can be empty, string or Array.
  * @param {Object} seperator - Can be empty or specific character to separate values with(Only used when Array 
  * 							   is sent as key)
  */
+
 UserInfo.prototype.getJSONValue = function(jsonKey, key, seperator){
+	
 	var JSONOBJ = JSON.parse(localStorage[jsonKey]);
 	
 	if(key){

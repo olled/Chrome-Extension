@@ -14,7 +14,8 @@
   "permissions": [
     "tabs",
     "notifications",
-    "https://api.projectplace.com/*"
+    "https://api.projectplace.com/*",
+	"unlimitedStorage"
   ],
   "content_scripts": [
     {

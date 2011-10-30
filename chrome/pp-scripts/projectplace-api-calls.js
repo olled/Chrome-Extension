@@ -24,21 +24,20 @@ ProjectplaceAPICall.prototype.Send = function(call, callback, method){
 }
 
 /**
- * Get all the users Projects  
- * @param {Object} callback - specific callback function to handle the result
- */
-ProjectplaceAPICall.prototype.getMyProjects = function(callback){
-	this.Send(APICALLS.USER.ME.GETMYPROJECTS,callback);
-	return this
-}
-
-
-/**
  * Get a specific users profile  
  * @param {Object} callback - specific callback function to handle the result
  */
 ProjectplaceAPICall.prototype.getMyProfile = function(callback){
 	this.Send(APICALLS.USER.ME.GETMYPROFILE,callback);
+	return this
+}
+
+/**
+ * Get all the users Projects  
+ * @param {Object} callback - specific callback function to handle the result
+ */
+ProjectplaceAPICall.prototype.getMyProjects = function(callback){
+	this.Send(APICALLS.USER.ME.GETMYPROJECTS,callback);
 	return this
 }
 
@@ -52,6 +51,11 @@ ProjectplaceAPICall.prototype.getMyFavoriteProjects = function(callback){
 	return this;
 }
 
+
+ProjectplaceAPICall.prototype.getMyCoWorkers = function(callback){
+	this.Send(APICALLS.USER.ME.GETMYCOWORKERS ,callback);
+	return this
+}
 /**
  * Get projects conversations  
  * @param {Object} callback - specific callback function to handle the result
