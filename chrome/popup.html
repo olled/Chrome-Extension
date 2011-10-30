@@ -5,59 +5,8 @@
 	<meta charset="utf-8">
 	<title>Projectplace for Chrome</title>
 	<link rel="stylesheet" href="/bootstrap/bootstrap.min.css">
-    <style>
-	 body {
-	 	width:800px;
-		height:400px;
-        padding-top: 40px; /* 40px to make the container go all the way to the bottom of the topbar */
-      }
-	  .container{
-	  	width: 740px;
-	  }
-      .container > footer p {
-        text-align: center; /* center align it with the container */
-      }
-      /* The white background content wrapper */
-      .content {
-        background-color: #fff;
-        padding: 20px;
-		
-        margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
-        -webkit-border-radius: 0 0 6px 6px;
-           -moz-border-radius: 0 0 6px 6px;
-                border-radius: 0 0 6px 6px;
-        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
-           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
-                box-shadow: 0 1px 2px rgba(0,0,0,.15);
-      }
+	<link rel="stylesheet" href="local.css">
 
-      /* Page header tweaks */
-      .page-header {
-        background-color: #f5f5f5;
-        padding: 20px 20px 10px;
-        margin: -20px -20px 20px;
-      }
-
-      /* Give a quick and non-cross-browser friendly divider */
-      .content .span6 {
-        margin-left: 0;
-        padding-left: 19px;
-        border-left: 1px solid #eee;
-      }
-	  .content .hero-unit{
-	  	
-	  }
-      .topbar .btn {
-        border: 0;
-      }
-	  .nav span{
-	  	color: grey;
-	  }
-	  .content ul.small a{
-	  	line-height:20px;
-		
-	  }
-	</style>
 	<script language="javascript" type="text/javascript" src="jquery.js"></script>
 	<script language="javascript" type="text/javascript" src="icanhaz/icanhaz.min.js"></script>
 	<script language="javascript" type="text/javascript" src="spin/spin.min.js"></script>
@@ -75,43 +24,45 @@
 	<!--
 		mainView: the start view, two coll 
 	-->
-	
 	<script id="mainView" type="text/html">
 		<div class="hero-unit" id="trending">
           <h1>Trending</h1>
 		  	<blockquote>
-			<p>{{trendingpost}}.</p>
-			<small>{{ trendingwho }} || {{nrofupdate}} - {{lastdate}}</small>
+			<p id="trendingPost">{{trendingpost}}.</p>
+			<small id="trendingWhoUpdatesDates">{{ trendingwho }} {{nrofupdate}} {{lastdate}}</small>
 			</blockquote>
           
 		  <ul class="pills small">
 			  <li class="{{commentsViewActive}}"><a href="#" onclick="return views.mainView(mainViewConfig.TRENDINGBYCOMMENTS);">By nr of comments</a></li>
 			  <li class="{{linksViewActive}}"><a href="#" onclick=" return views.mainView(mainViewConfig.TRENDINGBYLIKES);">By nr of Likes</a></li>
 		  </ul>
-		  <p><a class="btn success big" view="{{view}}" goto="{{conversationId}}" onclick="navigation.go(event);">Get involved &raquo;</a></p>
-        </div>
-	
-	  	<div class="row">
-          <div class="span4">
-            <a href="#all"><span class="label success">Unread items</span></a></p>
-			Show by: <a href="#byProject">Project</a> 
-          </div>
-          <div class="span6">
-            <h3>Secondary content</h3>
-          </div>
+		  <p><a id="getInvolved" class="btn success big" view="{{view}}" goto="{{conversationId}}" onclick="navigation.go(event);">Get involved &raquo;</a></p>
         </div>
 		<hr />
-		<div class="row">
-          <div class="span4">
-            <a href="#all"><span class="label success">Unread items</span></a></p>
-			Show by: <a href="#byProject">Project</a> 
-          </div>
-          <div class="span6">
-            <h3>Secondary content</h3>
-          </div>
+	  	<div class="row">
+          {{>fournew}}
         </div>	
 	</script>
-
+	
+	<!-- Partial via {{>fournew}} -->
+	<script id="fournew" class="partial" type="text/html">
+		<div class="span6">
+			{{conversationsOne}}
+			<small>{{conversationsOneWho}}</small>
+			<p><a class="btn" href="#">View details &raquo;</a></p>
+		</div>
+		<div class="span5">
+			{{conversationsTwo}}
+			<small>{{conversationsTwoWho}}</small>
+			<p><a class="btn" href="#">View details &raquo;</a></p>
+		</div>
+		<div class="span5">
+			{{conversationsThree}}
+			<small>{{conversationsThreeWho}}</small>
+			<p><a class="btn" href="#">View details &raquo;</a></p>
+		</div>
+	</script>
+	
 	<!--
 		aboutView: Who am I who created this..One coll view. 
 	-->
@@ -148,31 +99,66 @@
 		var background = chrome.extension.getBackgroundPage();
 		var user = background.getViewControll().user;
 		
-		function _displayTrendingCommentsBy(){
-			var trendingObject = user.getTrendingConversation();
-			var coworker = user.getSpecificCoWorker(trendingObject.posts[0].author_id);
+		function _showTrendingObject(view){
+			runSpinner.close();
+			if (view == 'by-comments') {
+				var trendingObject = user.getTrendingConversation();
+				var coworker = user.getSpecificCoWorker(trendingObject.posts[0].author_id);
+				var lastPost = toLocaleDateString(trendingObject.last_post_time);
+				$('#trendingPost').html(trendingObject.posts[0].message);
+				$('#trendingWhoUpdatesDates').html(coworker.sort_name + ' || Nr of Comments: '+ (trendingObject.post_count -1) + ' - '+lastPost )
+				
+				document.getElementById('getInvolved').setAttribute('goto',trendingObject.posts[0].id);
+				document.getElementById('getInvolved').setAttribute('view',trendingObject.posts[0].id);
+			}
 			
+			
+			
+		}
+		
+		function _displayTrendingCommentsBy(){
+			var arrOfFourConversations = user.getTopFourConversationsByDate();
+			
+			
+			/*var trendingObject = user.getTrendingConversation();
+			var coworker = user.getSpecificCoWorker(trendingObject.posts[0].author_id);
+			trendingObject.posts[0].message
+			coworker.sort_name
+			'Nr of Comments: '+ (trendingObject.post_count -1)
 			var lastPost = toLocaleDateString(trendingObject.last_post_time);
+			trendingObject.posts[0].id
+			*/
+			
+			
 			var mainConf = {
-				trendingpost: trendingObject.posts[0].message,
-				trendingwho: coworker.sort_name,
-				nrofupdate: 'Nr of Comments: '+ (trendingObject.post_count -1),
-				lastdate: lastPost,
-				conversationId: trendingObject.posts[0].id,
+				trendingpost: '',
+				trendingwho: '',
+				nrofupdate: '',
+				lastdate: '',
+				conversationId: '',
 				view: mainViewConfig.SINGLECONVERSATION,
 				commentsViewActive: 'active',
-				linksViewActive: ''
+				linksViewActive: '',
+				conversationsOne: arrOfFourConversations[0].posts[0].message,
+				conversationsOneWho: user.getSpecificCoWorker(arrOfFourConversations[0].posts[0].author_id).sort_name,
+				conversationsTwo : arrOfFourConversations[1].posts[0].message,
+				conversationsTwoWho: user.getSpecificCoWorker(arrOfFourConversations[1].posts[0].author_id).sort_name,
+				conversationsThree : arrOfFourConversations[2].posts[0].message,
+				conversationsThreeWho: user.getSpecificCoWorker(arrOfFourConversations[2].posts[0].author_id).sort_name
 			};
 			var main = ich.mainView(mainConf)
 			$('#content').empty();
 			$('#content').append(main);
+			runSpinner.run();
+			window.setTimeout('_showTrendingObject("by-comments")',2000);
 			
 		}
 		function _displayTrendingLikedBy(){
+			var arrOfFourConversations = user.getTopFourConversationsByDate();
 			var trendingObject = user.getTrendingConversation();
-			console.log(trendingObject)
+			
 			var coworker = user.getSpecificCoWorker(trendingObject.posts[0].author_id);
-			console.log(coworker)
+			
 			var lastPost = toLocaleDateString(trendingObject.last_post_time);
 			var likedByNr = 0;
 			for (var like in trendingObject.liked_by){
@@ -187,32 +173,45 @@
 				conversationId: trendingObject.posts[0].id,
 				view: mainViewConfig.SINGLECONVERSATION,
 				commentsViewActive: '',
-				linksViewActive: 'active'
+				linksViewActive: 'active',
+				conversationsOne: arrOfFourConversations[0].posts[0].message,
+				conversationsOneWho: user.getSpecificCoWorker(arrOfFourConversations[0].posts[0].author_id),
+				conversationsTwo : arrOfFourConversations[1].posts[0].message,
+				conversationsTwoWho: user.getSpecificCoWorker(arrOfFourConversations[1].posts[0].author_id),
+				conversationsThree : arrOfFourConversations[2].posts[0].message,
+				conversationsThreeWho: user.getSpecificCoWorker(arrOfFourConversations[2].posts[0].author_id)
 			};
 			var main = ich.mainView(mainConf);
 			$('#content').empty();	
 			$('#content').append(main);
 		}
-		
-		function runSpinner(){
-			var opts = {
-				lines: 12, // The number of lines to draw
-				length: 7, // The length of each line
-				width: 2, // The line thickness
-				radius: 10, // The radius of the inner circle
-				color: '#000', // #rbg or #rrggbb
-				speed: 1, // Rounds per second
-				trail: 100, // Afterglow percentage
-				shadow: true // Whether to render a shadow
-			};
-			
-			var target = document.getElementById('trending');
-			var spinner = new Spinner(opts).spin(target);
-			
+		var runSpinner = {
+			_spinner: null,
+			run: function(){
+				
+				var opts = {
+					lines: 12, // The number of lines to draw
+					length: 7, // The length of each line
+					width: 2, // The line thickness
+					radius: 10, // The radius of the inner circle
+					color: '#000', // #rbg or #rrggbb
+					speed: 1, // Rounds per second
+					trail: 100, // Afterglow percentage
+					shadow: true // Whether to render a shadow
+				};
+				
+				var target = document.getElementById('trending');
+				runSpinner._spinner = new Spinner(opts).spin(target);
+			},
+			close: function(){
+				runSpinner._spinner.stop();
+			}
 		}
+	
 		var views = {
 			mainView: function(trendingBy){
-				runSpinner();
+				runSpinner.run();
+				
 				if (trendingBy == mainViewConfig.TRENDINGBYCOMMENTS) {
 					var trendingId = user.getTrendingConversationOnCommentsId();
 					user.setTrendingConversationObject(trendingId);	
@@ -220,25 +219,28 @@
 					
 					
 					if (!initialLoad) {
+						
 						$('#nav').empty();
-						window.setTimeout('_displayTrendingCommentsBy();', 1500);
 					}
 					else{
 						initialLoad = false;
-						_displayTrendingCommentsBy();
 					}
+					//window.setTimeout('_displayTrendingCommentsBy();', 2500);
+					_displayTrendingCommentsBy();
 					var navConf = {
 						nrOfUpDates: '['+unReadItems+']'
 					};
 					
 					var nav = ich.navigation(navConf);
 					$('#nav').append(nav);
+					
+					return false;
 				}
 				else if (trendingBy == mainViewConfig.TRENDINGBYLIKES) {
 					var trendingId = user.getTrendingConversationOnLikesId();
 					user.setTrendingConversationObject(trendingId);	
 					
-					window.setTimeout('_displayTrendingLikedBy();',1500)
+					window.setTimeout('_displayTrendingLikedBy();',2500)
 					
 					return false;
 				}

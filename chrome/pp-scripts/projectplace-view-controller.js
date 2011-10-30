@@ -55,10 +55,6 @@ var PPAPI = new ProjectplaceAPICall();
 			var coworkers = JSON.parse(text);
 			ProjectplaceViewController.user.saveCoworkers(coworkers);
 			
-		});
-		
-		
-		
-		
+		});		
 	}
  }

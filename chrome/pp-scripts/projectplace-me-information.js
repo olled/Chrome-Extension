@@ -67,17 +67,37 @@ UserInfo.prototype.getSpecificCoWorker = function(value){
 			return coWorkers[coworker];	
 		}
 	}
+	
+	
+	if(this.userid == value){
+		return this.getJSONValue(this.userKey);
+	}
 	return null;
 }
-
+/**
+ * Returns a single project as a JSON object
+ * @param {Object} projectId - The project id to get
+ */
+UserInfo.prototype.getSpecificProject = function(projectId){
+	var projects = this.getJSONValue(this.userProjects);
+	for(var project in projects) {
+  		if(projects[project].id == projectId){
+			return projects[project];	
+		}
+	}
+	return null;
+}
 /**
  * Called on init(on start of browser) to clear all the conversatsions data saved on client.
  *
  */
 UserInfo.prototype._saveOldConversations = function(){
 	var c = localStorage[this.userConvKey];
-	localStorage['-old'+ this.userConvKey] = c; 
-	localStorage.removeItem(this.userConvKey);
+	if (c) {
+		localStorage['-old' + this.userConvKey] = c;
+		localStorage.removeItem(this.userConvKey);
+	} 
+	
 }
 
 /**
@@ -88,7 +108,6 @@ UserInfo.prototype._saveOldConversations = function(){
 UserInfo.prototype.setConversations = function(jsonText){
 	var savedConversations = this.getConversations();
 	if (jsonText.indexOf('{') != -1) {
-		
 		var findBeginingOfString = /^\[/;
 		var findEndOfString = /\]$/;
 		jsonText = jsonText.replace(findBeginingOfString, '');
@@ -105,6 +124,7 @@ UserInfo.prototype.setConversations = function(jsonText){
 		}
 		
 		localStorage[this.userConvKey] = jsonText;
+		
 	}
 }
 
@@ -132,6 +152,7 @@ UserInfo.prototype.getTrendingConversationOnCommentsId = function(){
 	var highestCount = 0;
 	var conversationsObject = null;
 	var conversations = this.getConversations();
+
 	for (var i = 0; i < conversations.length; i++)
 	{
 		if(conversations[i].post_count > highestCount){
@@ -150,6 +171,8 @@ UserInfo.prototype.getTrendingConversationOnLikesId = function(){
 	var highestCount = 0;
 	var conversationsObject = null;
 	var conversations = this.getConversations();
+	
+	
 	for (var i = 0; i < conversations.length; i++)
 	{
 		if (conversations[i].liked_by) {
@@ -195,14 +218,22 @@ UserInfo.prototype.getNewConversationsCount = function(){
 	var oldHighestDate = 0;
 	var numberOfNewPosts = 0;
 	
+	if(!localStorage['-old'+ this.userConvKey]){
+		return 0;
+	}
 	var oldUserConversations = this.getJSONValue('-old'+ this.userConvKey);
+	
+	
 	var newUserConversations = this.getJSONValue(this.userConvKey);
-	for(var i = 0; i < oldUserConversations.length; i++){
-		
-		if (oldHighestDate < oldUserConversations[i].last_post_time){
+	
+	
+	for (var i = 0; i < oldUserConversations.length; i++) {
+	
+		if (oldHighestDate < oldUserConversations[i].last_post_time) {
 			oldHighestDate = oldUserConversations[i].last_post_time;
 		}
 	}
+	
 	for(var i = 0; i < newUserConversations.length; i++){
 		if (oldHighestDate < newUserConversations[i].last_post_time){
 			numberOfNewPosts++;
@@ -214,7 +245,21 @@ UserInfo.prototype.getNewConversationsCount = function(){
 	}
 	return numberOfNewPosts;
 }
+/**
+ * Return the four newest conversations by date
+ */
+UserInfo.prototype.getTopFourConversationsByDate = function(){
+	var topFourConv = new Array();
+	var allConv = this.getJSONValue(this.userConvKey);
+	allConv.sort(sort_by('last_post_time', true, parseInt));
 	
+	topFourConv.push(allConv[0]);
+	topFourConv.push(allConv[1]);
+	topFourConv.push(allConv[2]);
+	topFourConv.push(allConv[3]);
+	
+	return topFourConv;
+}	
 
 /**
  * Returns the values of key from saved JSON Object(jsonKey), if no key we return the complete JSON Object.
@@ -225,6 +270,7 @@ UserInfo.prototype.getNewConversationsCount = function(){
  */
 
 UserInfo.prototype.getJSONValue = function(jsonKey, key, seperator){
+	
 	var JSONOBJ = JSON.parse(localStorage[jsonKey]);
 	
 	if(key){

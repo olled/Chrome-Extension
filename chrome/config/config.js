@@ -2,8 +2,8 @@ var CONFIG = {
 	BASEURL: 'https://api.projectplace.com',
 	APIURL: 'https://api.projectplace.com/1',
 	OAUTH: {
-		CONSUMERKEY: 'a5398f2cdfb161f5788b261350068fbc',
-		CONSUMERSECRET : '76b3226ccb9a17925fae34a631fc28110f8f90d5'
+		CONSUMERKEY: 'YOURKEY',
+		CONSUMERSECRET : 'YOURSECRET'
 	},
 	LOCALSTORAGEKEY: 'https://api.projectplace.com/1',
 	APPNAME: 'Projectplace for Chrome'
