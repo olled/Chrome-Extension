@@ -1,67 +1,121 @@
-/*Overrides the bootstrap css*/
-
+	/*Overrides the bootstrap css*/
+	
 body {
 	width:800px;
-height:400px;
-padding-top: 40px; /* 40px to make the container go all the way to the bottom of the topbar */
-}
+	height:400px;
+	padding-top: 40px; /* 40px to make the container go all the way to the bottom of the topbar */
+	}
 .container{
-	width: 740px;
-}
+		width: 740px;
+		/*width: 820px;*/
+	}
 .container > footer p {
-text-align: center; /* center align it with the container */
-}
-/* The white background content wrapper */
+	text-align: center; /* center align it with the container */
+	}
+	/* The white background content wrapper */
 .content {
-background-color: #fff;
-padding: 20px;
-
-margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
--webkit-border-radius: 0 0 6px 6px;
-   -moz-border-radius: 0 0 6px 6px;
-        border-radius: 0 0 6px 6px;
--webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
-   -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
-        box-shadow: 0 1px 2px rgba(0,0,0,.15);
-}
-
+	background-color: #fff;
+	padding: 20px;
+	
+	margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
+	-webkit-border-radius: 0 0 6px 6px;
+	   -moz-border-radius: 0 0 6px 6px;
+	        border-radius: 0 0 6px 6px;
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+	   -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+	        box-shadow: 0 1px 2px rgba(0,0,0,.15);
+	}
+	
 /* Page header tweaks */
 .page-header {
-background-color: #f5f5f5;
-padding: 20px 20px 10px;
-margin: -20px -20px 20px;
-}
-
+	background-color: #f5f5f5;
+	padding: 20px 20px 10px;
+	margin: -20px -20px 20px;
+	}
+	
 /* Give a quick and non-cross-browser friendly divider */
 .content .span6 {
-
-}
-.content .span5 {
-	width: 210px;
-	margin-left: 0;
-	padding-left: 19px;
-   	border-left: 1px solid #eee;
-
-	height:200px;	
-	overflow-x: hidden;
-
-}
-.content .span6 {
-	width: 220px;
-	height:200px;
-	overflow-x: hidden;
-
-}
-.content .hero-unit{
 	
+	}
+
+.content .span5 {
+		width: 210px;
+		margin-left: 0;
+		padding-left: 19px;
+	   	border-left: 1px solid #eee;
+	
+		height:200px;	
+		overflow-x: hidden;
+	
+	}
+.content .span6 {
+		width: 220px;
+		height:200px;
+		overflow-x: hidden;
+	
+	}
+.content .hero-unit {
+  background-color: #f5f5f5;
+  margin-bottom: 30px;
+  padding: 15px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+}
+.content .hero-unit h1 {
+  margin-bottom: 0;
+  font-size: 50px;
+  line-height: 1;
+  letter-spacing: -1px;
+}
+.content .hero-unit p {
+  font-size: 18px;
+  font-weight: 2;
+  line-height: 27px;
+}
+.content .pills{
+	margin: -25px 0 0 0;
+	padding:0;
 }
 .topbar .btn {
-border: 0;
-}
+	border: 0;
+	}
 .nav span{
-	color: grey;
-}
+		color: grey;
+	}
 .content ul.small a{
-	line-height:20px;
-
+		line-height:20px;
+	
+}
+.content .get-involved a{
+	float:right;
+}
+	
+	
+	
+/*Single conversations view specific css*/
+/* Give a quick and non-cross-browser friendly divider */
+.content .span4 {
+	        margin-left: 0;
+	        padding-left: 19px;
+	        border-left: 1px solid #eee;
+}
+.content .span10{
+	width:500px;
+}
+.content .span10, .content .span4 {
+	        min-height: 500px;
+}
+div .clearfix{
+	padding-top:12px;
+	border-top: 1px solid #ddd;
+  -webkit-border-radius: 0 0 3px 3px;
+  -moz-border-radius: 0 0 3px 3px;
+  border-radius: 0 0 3px 3px;
+}
+form .input {
+  margin-left: 0;
+}
+form textarea.xxlarge{
+	width: 480px;
 }

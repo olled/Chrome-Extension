@@ -4,29 +4,16 @@ TestCase("Test Configurations", {
         
     },
 
-    testUrlConfig: function() {
-        assertEquals('https://service.projectplace.com/pp/', urlConfig.rootURL);
-		
-    }
-
+    testBaseUrlConfig: function() {
+        assertEquals('https://api.projectplace.com', CONFIG.BASEURL);
+    },
+	testApiUrlCinfig: function(){
+		assertEquals('https://api.projectplace.com/1', CONFIG.APIURL);
+	}
 });
 	
 TestCase("Test LocalStorage", {
     setUp: function() {
        
-    },
-	testClearOfWallPosts: function()
-	{
-		assertFalse(false);
-	},
-	
-	testSetUserNamePwd: function()
-	{
-		assertEquals(1, 1);
-	},
-	testRemoveUserNamePwd : function()
-	{
-		
-		assertNull(null);
-	}
+    }
 });

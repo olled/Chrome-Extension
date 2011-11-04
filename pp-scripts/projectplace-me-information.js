@@ -206,7 +206,6 @@ UserInfo.prototype.setTrendingConversationObject = function(convId){
  * has the highest number of comments.
  */
 UserInfo.prototype.getTrendingConversation = function(){
-	
 	return JSON.parse(localStorage[this.userTrendingConv]);
 }
 
@@ -260,6 +259,32 @@ UserInfo.prototype.getTopFourConversationsByDate = function(){
 	
 	return topFourConv;
 }	
+
+/**
+ * Gets a specific conversations without any comments from localstorage.
+ * Must be called after all the conversions have been save though .setConversations()
+ * @param {Object} convId - the specific id of the conversation to save
+ */
+UserInfo.prototype.getSpecificConversation = function(convId, callback){
+	
+	var allConversations = this.getConversations();
+	for(var conv in allConversations){
+		if(allConversations[conv].id == convId){
+			callback(allConversations[conv]);
+			break;
+		}
+	}
+}
+
+
+/**
+ * Gets a specific conversations comments from the API.
+ * @param {Object} convId - the specific id of the conversation to save
+ */
+UserInfo.prototype.getSpecificConversationComments = function(convId, callback){
+	var apiCall = new ProjectplaceAPICall();
+	apiCall.specificConversation(convId, callback);
+}
 
 /**
  * Returns the values of key from saved JSON Object(jsonKey), if no key we return the complete JSON Object.

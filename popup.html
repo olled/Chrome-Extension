@@ -31,13 +31,12 @@
 			<p id="trendingPost">{{trendingpost}}.</p>
 			<small id="trendingWhoUpdatesDates">{{ trendingwho }} {{nrofupdate}} {{lastdate}}</small>
 			</blockquote>
-          
+        </div>
+		 <p class="get-involved"><a id="getInvolved" class="btn success big" view="{{view}}" goto="{{conversationId}}" onclick="mainViewNavigation.go(event);">Get involved &raquo;</a></p>
 		  <ul class="pills small">
 			  <li class="{{commentsViewActive}}"><a href="#" onclick="return views.mainView(mainViewConfig.TRENDINGBYCOMMENTS);">By nr of comments</a></li>
 			  <li class="{{linksViewActive}}"><a href="#" onclick=" return views.mainView(mainViewConfig.TRENDINGBYLIKES);">By nr of Likes</a></li>
 		  </ul>
-		  <p><a id="getInvolved" class="btn success big" view="{{view}}" goto="{{conversationId}}" onclick="navigation.go(event);">Get involved &raquo;</a></p>
-        </div>
 		<hr />
 	  	<div class="row">
           {{>fournew}}
@@ -48,18 +47,18 @@
 	<script id="fournew" class="partial" type="text/html">
 		<div class="span6">
 			{{conversationsOne}}
-			<small>{{conversationsOneWho}}</small>
-			<p><a class="btn" href="#">View details &raquo;</a></p>
+			<p><small>{{conversationsOneWho}}</small></p>
+			<p><a class="btn" view="{{view}}" goto="{{conversationsOneId}}" onclick="mainViewNavigation.go(event);" href="#">View details &raquo;</a></p>
 		</div>
 		<div class="span5">
 			{{conversationsTwo}}
-			<small>{{conversationsTwoWho}}</small>
-			<p><a class="btn" href="#">View details &raquo;</a></p>
+			<p><small>{{conversationsTwoWho}}</small></p>
+			<p><a class="btn" view="{{view}}" goto="{{conversationsTwoId}}" onclick="mainViewNavigation.go(event);" href="#">View details &raquo;</a></p>
 		</div>
 		<div class="span5">
 			{{conversationsThree}}
-			<small>{{conversationsThreeWho}}</small>
-			<p><a class="btn" href="#">View details &raquo;</a></p>
+			<p><small>{{conversationsThreeWho}}</small></p>
+			<p><a class="btn" view="{{view}}" goto="{{conversationsThreeId}}" onclick="mainViewNavigation.go(event);" href="#">View details &raquo;</a></p>
 		</div>
 	</script>
 	
@@ -87,11 +86,56 @@
 	<script id="navigation" type="text/html">
 		<li class="active"><a href="#">Conversations <span>{{ nrOfUpDates }}</span></a></li>
 		<li><a href="#">Projects</a></li>
+		<li><a href="#">People</a></li>
         <li><a href="#about">About</a></li>
         <li><a href="#contact">Contact</a></li>
 	</script>
 	
-		
+	<!--
+		Single Conversations view
+	-->
+	<script id="singleNavigation" type="text/html">
+	 <div class="page-header">
+          <h1>Post by {{authorName}} <small>{{lastPost}}</small></h1>
+        </div>
+        <div class="row">
+          <div class="span10">
+          	<h3>Message</h3>
+            {{postMessage}} 
+			<p><small>
+				<a href="#" onclick="alert('not implemented');" title="User page">{{authorName}}</a> - {{title}} {{organisation}}
+				</small>
+			</p>
+			<form>
+				<div class="clearfix">
+		         <div class="input">
+		              <textarea class="xxlarge" id="postComment" rows="4"></textarea>
+		              <span class="help-block">
+		                Add your own saying in this matter
+		              </span>
+	            </div>
+				<div class="actions">
+	            <input type="submit" class="btn primary" value="Post your comment">&nbsp;<button type="reset" class="btn">Cancel</button>
+			</form>
+          </div>
+          </div>
+          </div>
+          <div class="span4" id="singleConversationsComments">
+            <h3>Comments</h3>
+			{{comments}}
+          </div>
+        </div>
+	</script>
+	
+	
+	<script id="singleNavigationPost" type="text/html">
+	  <div>
+	  	{{message}}
+		<p><small>{{who}} - {{time}}</small></p>
+	  </div>
+	  
+	 </script>
+	
 	<script language="javascript" type="text/javascript">
 		var initialLoad = true;
 		clearBadgeText();
@@ -99,7 +143,7 @@
 		var background = chrome.extension.getBackgroundPage();
 		var user = background.getViewControll().user;
 		
-		function _showTrendingObject(view){
+		function _showTrendingObject(view, trendingId){
 			runSpinner.close();
 			if (view == 'by-comments') {
 				var trendingObject = user.getTrendingConversation();
@@ -108,28 +152,12 @@
 				$('#trendingPost').html(trendingObject.posts[0].message);
 				$('#trendingWhoUpdatesDates').html(coworker.sort_name + ' || Nr of Comments: '+ (trendingObject.post_count -1) + ' - '+lastPost )
 				
-				document.getElementById('getInvolved').setAttribute('goto',trendingObject.posts[0].id);
-				document.getElementById('getInvolved').setAttribute('view',trendingObject.posts[0].id);
+				document.getElementById('getInvolved').setAttribute('goto',trendingId);
 			}
-			
-			
-			
 		}
 		
-		function _displayTrendingCommentsBy(){
+		function _displayTrendingCommentsBy(trendingId){
 			var arrOfFourConversations = user.getTopFourConversationsByDate();
-			
-			
-			/*var trendingObject = user.getTrendingConversation();
-			var coworker = user.getSpecificCoWorker(trendingObject.posts[0].author_id);
-			trendingObject.posts[0].message
-			coworker.sort_name
-			'Nr of Comments: '+ (trendingObject.post_count -1)
-			var lastPost = toLocaleDateString(trendingObject.last_post_time);
-			trendingObject.posts[0].id
-			*/
-			
-			
 			var mainConf = {
 				trendingpost: '',
 				trendingwho: '',
@@ -141,19 +169,22 @@
 				linksViewActive: '',
 				conversationsOne: arrOfFourConversations[0].posts[0].message,
 				conversationsOneWho: user.getSpecificCoWorker(arrOfFourConversations[0].posts[0].author_id).sort_name,
+				conversationsOneId: arrOfFourConversations[0].id,
 				conversationsTwo : arrOfFourConversations[1].posts[0].message,
 				conversationsTwoWho: user.getSpecificCoWorker(arrOfFourConversations[1].posts[0].author_id).sort_name,
+				conversationsTwoId: arrOfFourConversations[1].id,
 				conversationsThree : arrOfFourConversations[2].posts[0].message,
-				conversationsThreeWho: user.getSpecificCoWorker(arrOfFourConversations[2].posts[0].author_id).sort_name
+				conversationsThreeWho: user.getSpecificCoWorker(arrOfFourConversations[2].posts[0].author_id).sort_name,
+				conversationsThreeId: arrOfFourConversations[2].id
 			};
 			var main = ich.mainView(mainConf)
 			$('#content').empty();
 			$('#content').append(main);
 			runSpinner.run();
-			window.setTimeout('_showTrendingObject("by-comments")',2000);
+			window.setTimeout('_showTrendingObject("by-comments",'+trendingId+')',2000);
 			
 		}
-		function _displayTrendingLikedBy(){
+		function _displayTrendingLikedBy(trendingId){
 			var arrOfFourConversations = user.getTopFourConversationsByDate();
 			var trendingObject = user.getTrendingConversation();
 			
@@ -170,16 +201,19 @@
 				trendingwho: coworker.sort_name,
 				nrofupdate: 'Nr of Likes: '+ likedByNr,
 				lastdate: lastPost,
-				conversationId: trendingObject.posts[0].id,
+				conversationId: trendingId,
 				view: mainViewConfig.SINGLECONVERSATION,
 				commentsViewActive: '',
 				linksViewActive: 'active',
 				conversationsOne: arrOfFourConversations[0].posts[0].message,
 				conversationsOneWho: user.getSpecificCoWorker(arrOfFourConversations[0].posts[0].author_id),
+				conversationsOneId: arrOfFourConversations[0].id,
 				conversationsTwo : arrOfFourConversations[1].posts[0].message,
 				conversationsTwoWho: user.getSpecificCoWorker(arrOfFourConversations[1].posts[0].author_id),
+				conversationsTwoId: arrOfFourConversations[1].id,
 				conversationsThree : arrOfFourConversations[2].posts[0].message,
-				conversationsThreeWho: user.getSpecificCoWorker(arrOfFourConversations[2].posts[0].author_id)
+				conversationsThreeWho: user.getSpecificCoWorker(arrOfFourConversations[2].posts[0].author_id),
+				conversationsThreeId: arrOfFourConversations[2].id
 			};
 			var main = ich.mainView(mainConf);
 			$('#content').empty();	
@@ -187,8 +221,7 @@
 		}
 		var runSpinner = {
 			_spinner: null,
-			run: function(){
-				
+			run: function(_target){
 				var opts = {
 					lines: 12, // The number of lines to draw
 					length: 7, // The length of each line
@@ -199,15 +232,15 @@
 					trail: 100, // Afterglow percentage
 					shadow: true // Whether to render a shadow
 				};
-				
-				var target = document.getElementById('trending');
+				var target = (!_target?document.getElementById('trending') : document.getElementById(_target));
+				//var target = document.getElementById('trending');
 				runSpinner._spinner = new Spinner(opts).spin(target);
 			},
 			close: function(){
 				runSpinner._spinner.stop();
 			}
 		}
-	
+
 		var views = {
 			mainView: function(trendingBy){
 				runSpinner.run();
@@ -225,8 +258,7 @@
 					else{
 						initialLoad = false;
 					}
-					//window.setTimeout('_displayTrendingCommentsBy();', 2500);
-					_displayTrendingCommentsBy();
+					_displayTrendingCommentsBy(trendingId);
 					var navConf = {
 						nrOfUpDates: '['+unReadItems+']'
 					};
@@ -240,10 +272,59 @@
 					var trendingId = user.getTrendingConversationOnLikesId();
 					user.setTrendingConversationObject(trendingId);	
 					
-					window.setTimeout('_displayTrendingLikedBy();',2500)
+					window.setTimeout('_displayTrendingLikedBy('+trendingId+');',2500)
 					
 					return false;
 				}
+			},
+			singleConversationsView: function(conversationsId)
+			{
+				
+				$('#content').empty();
+				function _presentConversation(conversationObject){
+					
+					var coworker = user.getSpecificCoWorker(conversationObject.posts[0].author_id);
+			
+					var lastPost = toLocaleDateString(conversationObject.last_post_time);
+					var likedByNr = 0;
+					for (var like in conversationObject.liked_by){
+						likedByNr++;
+					}
+					
+					var comments = '';
+					
+					var singleNavConf = {
+						authorName: coworker.sort_name,
+						organisation: coworker.organisation_name,
+						title: coworker.title,
+						lastPost: lastPost,
+						postMessage: conversationObject.posts[0].message,
+						comments: comments
+					};
+					var singelNavigation = ich.singleNavigation(singleNavConf)
+					$('#content').append(singelNavigation);
+					
+					runSpinner.run('singleConversationsComments');
+					
+					function _displayComments(t, xhr){
+						var singleConversationWithComments = JSON.parse(t);
+						var comments = singleConversationWithComments.posts;
+						comments.sort(sort_by('created_time', true, parseInt));
+						for(var i = 0; i < comments.length-1; i++){
+							singleConf = {
+								message:comments[i].message,
+								who:user.getSpecificCoWorker(comments[i].author_id).sort_name,
+								time: toLocaleDateString(comments[i].created_time)
+							}
+							$('#singleConversationsComments').append(ich.singleNavigationPost(singleConf));
+						}
+						runSpinner.close();
+					}
+					user.getSpecificConversationComments(conversationsId, _displayComments);	
+				}
+				user.getSpecificConversation(conversationsId, _presentConversation);
+				
+				
 				
 			},
 			projectsView: function(){
@@ -254,9 +335,7 @@
 			},
 			contactsView: function(){
 				
-				
 			}
-			
 		}		
 		window.onload = function(){
 			views.mainView(mainViewConfig.TRENDINGBYCOMMENTS);
@@ -269,7 +348,7 @@
   	<div class="topbar">
       <div class="topbar-inner">
         <div class="container-fluid">
-          <a class="brand" href="#">Chrome for Projectplace</a>
+          <a class="brand" href="#" onclick="views.mainView(mainViewConfig.TRENDINGBYCOMMENTS);">Chrome for Projectplace</a>
           <ul class="nav" id="nav">
 			
           </ul>
@@ -282,7 +361,7 @@
       </div>
 
       <footer>
-        <p><a href="http://github.com/olled/" target="_blank">Get involved?</a></p>
+        <p><small><a href="http://github.com/olled/" target="_blank">Wanna help develop this one?</a></small></p>
       </footer>
 
     </div>
