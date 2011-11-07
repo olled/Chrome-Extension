@@ -155,13 +155,12 @@
 	  
 	 </script>
 	 
-	 
 	<!--
-		All Conversatsion View
+		All Conversations View
 	-->
 	<script id="allConversationsView" type="text/html">
 	 	<div id="allconversations" class="page-header">
-          <h1>All Conversations<small>- found in Projectplace</small></h1>
+          <h1>All Conversations<small> - found in Projectplace</small></h1>
         </div>
 	</script>
 	
@@ -205,32 +204,32 @@
 	<div class="row">
 	          <ul class="media-grid">
 				  <li>
-				      <a href="#" id="test" rel="popover" data-content="And here's some amazing content." data-original-title="A title">
+				      <a href="#" id="{{userid1}}" rel="popover" data-content="{{userdata1}}" data-original-title="{{username1}}">
 				      <img class="thumbnail" src="http://placehold.it/90x90" alt="">
 				    </a>
 				  </li>
 				  <li>
-				    <a href="#">
+				    <a href="#" id="{{userid2}}" rel="popover" data-content="{{userdata2}}" data-original-title="{{username2}}">
 				      <img class="thumbnail" src="http://placehold.it/90x90" alt="">
 				    </a>
 				  </li>
 				  <li>
-				    <a href="#">
+				    <a href="#" id="{{userid3}}" rel="popover" data-content="{{userdata3}}" data-original-title="{{username3}}">
 				      <img class="thumbnail" src="http://placehold.it/90x90" alt="">
 				    </a>
 				  </li>
 				  <li>
-				    <a href="#">
+				    <a href="#" id="{{userid4}}" rel="popover" data-content="{{userdata4}}" data-original-title="{{username4}}">
 				      <img class="thumbnail" src="http://placehold.it/90x90" alt="">
 				    </a>
 				  </li>
 				  <li>
-				    <a href="#">
+				    <a href="#" id="{{userid5}}" rel="popover" data-content="{{userdata5}}" data-original-title="{{username5}}">
 				      <img class="thumbnail" src="http://placehold.it/90x90" alt="">
 				    </a>
 				  </li>
 				  <li>
-				    <a href="#">
+				    <a href="#" id="{{userid6}}" rel="popover" data-content="{{userdata6}}" data-original-title="{{username6}}">
 				      <img class="thumbnail" src="http://placehold.it/90x90" alt="">
 				    </a>
 				  </li>
@@ -468,15 +467,54 @@
 				//$('body').scrollSpy('refresh');
 			},
 			allPeoplesView: function(){
+				
 				$('#content').empty();
 				$('#content').append(ich.allPeoplesView({}));
-				$('#content').append(ich.rowAllPeoplePage({}));
 				
-				var tOptions = {
-					content: 'A little test to see if we can get this text',
-					title: 'The heading!'
+				var allUsers = user.getCoworkers();
+				allUsers.sort(sort_by('sort_name', false));
+				
+				
+				for(var i = 0; i< allUsers.length; i+=6){
+					console.log(allUsers[i])
+					try {
+						rowConfig = {
+							userid1: allUsers[i].id,
+							userdata1: allUsers[i].title +' '+ allUsers[i].description +' '+allUsers[i].organisation_name,
+							username1: allUsers[i].sort_name,
+							userid2: allUsers[i + 1].id,
+							userdata2: allUsers[i + 1].title +' '+ allUsers[i + 1].description +' '+allUsers[i + 1].organisation_name,
+							username2: allUsers[i + 1].sort_name,
+							userid3: allUsers[i + 2].id,
+							userdata3: allUsers[i + 2].title +' '+ allUsers[i + 2].description +' '+allUsers[i + 2].organisation_name,
+							username3: allUsers[i + 2].sort_name,
+							userid4: allUsers[i + 3].id,
+							userdata4:allUsers[i + 3].title +' '+ allUsers[i + 3].description +' '+allUsers[i + 3].organisation_name,
+							username4: allUsers[i + 3].sort_name,
+							userid5: allUsers[i + 4].id,
+							userdata5: allUsers[i + 4].title +' '+ allUsers[i + 4].description +' '+allUsers[i + 4].organisation_name,
+							username5: allUsers[i + 4].sort_name,
+							userid6: allUsers[i + 5].id,
+							userdata6: allUsers[i + 5].title +' '+ allUsers[i + 5].description +' '+allUsers[i + 5].organisation_name,
+							username6: allUsers[i + 5].sort_name
+						}
+						$('#content').append(ich.rowAllPeoplePage(rowConfig));
+					}
+					catch(e){console.log(i);}
 				}
-				$('#test').popover({});
+				
+				var allImages = document.getElementsByTagName('img');
+				for(var i = 0; i < allImages.length; i++){
+					
+					function _setUserImage(sHref){
+						allImages[i].src = sHref;
+					}
+					if (allImages[i].parentNode.id) {
+						user.getUserImageHref(allImages[i].parentNode.id, _setUserImage);
+					}
+				}
+				
+				$(".media-grid > li > a").popover({})
 				
 			},
 			singleUserView: function(){

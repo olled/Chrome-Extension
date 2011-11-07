@@ -157,3 +157,8 @@ form textarea.xxlarge{
 .content .media-grid{
 	margin-left:6px;
 }
+
+.media-grid a img{
+	height: 90px;
+	width: 90px;
+}

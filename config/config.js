@@ -16,7 +16,10 @@ var APICALLS = {
 			GETMYFAVORITEPROJECTS: 	CONFIG.APIURL +'/user/me/favorite-projects.json',
 			GETMYPROFILE:  			CONFIG.APIURL+'/user/me/profile.json',
 			GETMYCOWORKERS:			CONFIG.APIURL+'/user/me/coworkers.json'
-		  }
+		  },
+		USERS: {
+			USERIMAGE: CONFIG.APIURL+'/avatar/USER_ID/ACCESS_TOKEN'
+		} 
 	},
 	PROJECTS:{
 		CONVERSATIONS: CONFIG.APIURL+'/project/PROJECT_ID/conversations.json'

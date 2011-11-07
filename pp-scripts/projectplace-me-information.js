@@ -52,7 +52,7 @@ UserInfo.prototype.saveCoworkers = function(coworkers){
  * Returns all coworkers from localstorage.
  */
 UserInfo.prototype.getCoworkers = function(){
-	JSON.parse(localStorage[this.userCoworkers]);
+	return JSON.parse(localStorage[this.userCoworkers]);
 }
 
 /**
@@ -285,6 +285,18 @@ UserInfo.prototype.getSpecificConversationComments = function(convId, callback){
 	var apiCall = new ProjectplaceAPICall();
 	apiCall.specificConversation(convId, callback);
 }
+
+
+/**
+ * Gets a specific coworkers image url
+ * @param {Number} userid - the specific id of the user to get
+ */
+UserInfo.prototype.getUserImageHref = function(userid, callback){
+	var apiCall = new ProjectplaceAPICall();
+	apiCall.getUserImageHref(userid, callback);
+}
+
+
 
 /**
  * Returns the values of key from saved JSON Object(jsonKey), if no key we return the complete JSON Object.

@@ -76,3 +76,17 @@ ProjectplaceAPICall.prototype.specificConversation = function(conversationId, ca
 	return this.Send(APICALLS.CONVERSATIONS.SPECIFICCONVERSATION.replace('CONVERSATION_ID', conversationId),callback);
 	
 }
+
+/**
+ * Get user image href
+ * @param {Object} callback - specific callback function to handle the result
+ * @param {String} userid - specific user id.
+ */
+ProjectplaceAPICall.prototype.getUserImageHref = function(userid, callback){
+	var accessToken = localStorage['oauth_token'+CONFIG.APIURL];
+	callback(APICALLS.USER.USERS.USERIMAGE.replace('USER_ID', userid).replace('ACCESS_TOKEN',accessToken));
+	
+}
+
+
+
