@@ -10,6 +10,10 @@
 	<script language="javascript" type="text/javascript" src="jquery.js"></script>
 	<script language="javascript" type="text/javascript" src="icanhaz/icanhaz.min.js"></script>
 	<script language="javascript" type="text/javascript" src="spin/spin.min.js"></script>
+	
+	<script language="javascript" type="text/javascript" src="bootstrap/js/bootstrap-scrollspy.js"></script>
+	<script language="javascript" type="text/javascript" src="bootstrap/js/bootstrap-twipsy.js"></script>
+	<script language="javascript" type="text/javascript" src="bootstrap/js/bootstrap-popover.js"></script>
 
 	<script type="text/javascript" src="oauth/chrome_ex_oauthsimple.js"></script>
 	<script type="text/javascript" src="oauth/chrome_ex_oauth.js"></script>
@@ -67,15 +71,30 @@
 	-->
 	<script id="aboutView" type="text/html">
 	  	<div class="row">
-          <div class="span6">
-            <h3>This is about me!</h3>
-			My name is Olle Dahlstršm, and I created this since I want to be able to browse conversations, documents etc 
-			from Projectplace right in my browser.
-			I do not want to login, I want it where I am, in my browser.
-			
-			If you see anything strange that does not work, or would like to give me some feedback(possitiv is more fun 
-			the negative) or anything, please contact me @ <a href="mailto: olle.dahlstrom@gmail.com">Olle Dahlstršm @ gmail</a>
-          </div>
+          <div class="page-header">
+          	<h1>About<small> - Olle Dahlstršm</small></h1>
+	       </div>
+             <div class="row">
+             	
+				<div class="span3"> 
+				  <ul class="media-grid">
+				  <li>
+				    <a href="#" id="me" rel="popover" data-content="Yeah, this is me" data-original-title="Olle Dahlstrom">
+				     <img class="thumbnail" src="http://dl.dropbox.com/u/23070527/chrome-ext-img/olle.jpg" alt="Olle">
+				    </a>
+				  </li>
+				 </ul>
+				 </div>
+				 <div class="span8">
+					My name is Olle Dahlstršm, and I created this since I want to be able to browse conversations, 
+					documents etc from Projectplace right in my browser.
+					I do not want to login, I want it where I am, in my browser.
+				<p />
+				<p><small>If you see anything strange that does not work, or would like to give me some feedback(possitiv is more fun 
+				the negative) or anything, please contact me @ <a href="mailto:olle.dahlstrom@gmail.com">Olle Dahlstrom @ gmail</a>
+				</small></p>
+				</div>
+           </div>
         </div>
 	 </script>
 	
@@ -84,11 +103,10 @@
 		navigation: the main top navigation
 	-->
 	<script id="navigation" type="text/html">
-		<li class="active"><a href="#">Conversations <span>{{ nrOfUpDates }}</span></a></li>
-		<li><a href="#">Projects</a></li>
-		<li><a href="#">People</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#contact">Contact</a></li>
+		<li><a href="#allconversations" view="{{allconversations}}" goto="none" onclick="mainViewNavigation.go(event);">Conversations <span>{{ nrOfUpDates }}</span></a></li>
+		<li><a href="#allprojects">Projects</a></li>
+		<li><a href="#allpeople" view="{{peoplesView}}" goto="none" onclick="mainViewNavigation.go(event);">People</a></li>
+        <li><a href="#about" view="{{aboutMe}}" goto="none" onclick="mainViewNavigation.go(event);">About/Contact</a></li>
 	</script>
 	
 	<!--
@@ -100,34 +118,35 @@
         </div>
         <div class="row">
           <div class="span10">
-          	<h3>Message</h3>
+          	<button class="btn success" type="like">Like</button>
             {{postMessage}} 
 			<p><small>
 				<a href="#" onclick="alert('not implemented');" title="User page">{{authorName}}</a> - {{title}} {{organisation}}
 				</small>
 			</p>
 			<form>
-				<div class="clearfix">
+			  <div class="clearfix">
 		         <div class="input">
-		              <textarea class="xxlarge" id="postComment" rows="4"></textarea>
-		              <span class="help-block">
-		                Add your own saying in this matter
-		              </span>
+		           <textarea class="xxlarge" id="postComment" rows="4"></textarea>
+		           <span class="help-block">
+		              Add your own saying in this matter
+		            </span>
 	            </div>
 				<div class="actions">
-	            <input type="submit" class="btn primary" value="Post your comment">&nbsp;<button type="reset" class="btn">Cancel</button>
+	            	<input type="submit" class="btn primary" value="Post your comment">&nbsp;<button type="reset" class="btn">Cancel</button>
+          		</div>
+			   </div>
 			</form>
+          
           </div>
-          </div>
-          </div>
-          <div class="span4" id="singleConversationsComments">
-            <h3>Comments</h3>
+          <div class="span4 commentsview" id="singleConversationsComments">
+            <h4>Comments</h4>
 			{{comments}}
           </div>
         </div>
 	</script>
 	
-	
+	<!--One comment in the single conversations view -->
 	<script id="singleNavigationPost" type="text/html">
 	  <div>
 	  	{{message}}
@@ -135,6 +154,89 @@
 	  </div>
 	  
 	 </script>
+	 
+	 
+	<!--
+		All Conversatsion View
+	-->
+	<script id="allConversationsView" type="text/html">
+	 	<div id="allconversations" class="page-header">
+          <h1>All Conversations<small>- found in Projectplace</small></h1>
+        </div>
+	</script>
+	
+	<!--
+		One row in all Conversations View
+	-->
+	<script id="rowAllConversationsView" type="text/html">
+	<div class="row">
+	          <div class="span15" view="{{view}}" goto="{{conversationId1}}" onclick="mainViewNavigation.go(event);">
+	            {{row1Message}}
+				<p><small>{{who1}} - {{time1}}</small></p>
+	          </div>
+			  <div class="span15" view="{{view}}" goto="{{conversationId2}}" onclick="mainViewNavigation.go(event);">
+	            {{row2Message}}
+				<p><small>{{who2}} - {{time2}}</small></p>
+	          </div>
+			  <div class="span15" view="{{view}}" goto="{{conversationId3}}" onclick="mainViewNavigation.go(event);">
+	            {{row3Message}}
+				<p><small>{{who3}} - {{time3}}</small></p>
+	          </div>
+			  <div class="span15" view="{{view}}" goto="{{conversationId4}}" onclick="mainViewNavigation.go(event);">
+	            {{row4Message}}
+				<p><small>{{who4}} - {{time4}}</small></p>
+	          </div>
+		</div>
+	</script>
+	
+	<!--
+		All Peoples View heading
+	-->
+	<script id="allPeoplesView" type="text/html">
+	 	<div class="page-header">
+          <h1>Colleagues<small> - found in Projectplace</small></h1>
+        </div>
+	</script>
+	
+	<!--
+		One row in all Peoples View
+	-->
+	<script id="rowAllPeoplePage" type="text/html">
+	<div class="row">
+	          <ul class="media-grid">
+				  <li>
+				      <a href="#" id="test" rel="popover" data-content="And here's some amazing content." data-original-title="A title">
+				      <img class="thumbnail" src="http://placehold.it/90x90" alt="">
+				    </a>
+				  </li>
+				  <li>
+				    <a href="#">
+				      <img class="thumbnail" src="http://placehold.it/90x90" alt="">
+				    </a>
+				  </li>
+				  <li>
+				    <a href="#">
+				      <img class="thumbnail" src="http://placehold.it/90x90" alt="">
+				    </a>
+				  </li>
+				  <li>
+				    <a href="#">
+				      <img class="thumbnail" src="http://placehold.it/90x90" alt="">
+				    </a>
+				  </li>
+				  <li>
+				    <a href="#">
+				      <img class="thumbnail" src="http://placehold.it/90x90" alt="">
+				    </a>
+				  </li>
+				  <li>
+				    <a href="#">
+				      <img class="thumbnail" src="http://placehold.it/90x90" alt="">
+				    </a>
+				  </li>
+				</ul>
+		</div>
+	</script>
 	
 	<script language="javascript" type="text/javascript">
 		var initialLoad = true;
@@ -206,13 +308,13 @@
 				commentsViewActive: '',
 				linksViewActive: 'active',
 				conversationsOne: arrOfFourConversations[0].posts[0].message,
-				conversationsOneWho: user.getSpecificCoWorker(arrOfFourConversations[0].posts[0].author_id),
+				conversationsOneWho: user.getSpecificCoWorker(arrOfFourConversations[0].posts[0].author_id).sort_name,
 				conversationsOneId: arrOfFourConversations[0].id,
 				conversationsTwo : arrOfFourConversations[1].posts[0].message,
-				conversationsTwoWho: user.getSpecificCoWorker(arrOfFourConversations[1].posts[0].author_id),
+				conversationsTwoWho: user.getSpecificCoWorker(arrOfFourConversations[1].posts[0].author_id).sort_name,
 				conversationsTwoId: arrOfFourConversations[1].id,
 				conversationsThree : arrOfFourConversations[2].posts[0].message,
-				conversationsThreeWho: user.getSpecificCoWorker(arrOfFourConversations[2].posts[0].author_id),
+				conversationsThreeWho: user.getSpecificCoWorker(arrOfFourConversations[2].posts[0].author_id).sort_name,
 				conversationsThreeId: arrOfFourConversations[2].id
 			};
 			var main = ich.mainView(mainConf);
@@ -233,7 +335,6 @@
 					shadow: true // Whether to render a shadow
 				};
 				var target = (!_target?document.getElementById('trending') : document.getElementById(_target));
-				//var target = document.getElementById('trending');
 				runSpinner._spinner = new Spinner(opts).spin(target);
 			},
 			close: function(){
@@ -244,7 +345,6 @@
 		var views = {
 			mainView: function(trendingBy){
 				runSpinner.run();
-				
 				if (trendingBy == mainViewConfig.TRENDINGBYCOMMENTS) {
 					var trendingId = user.getTrendingConversationOnCommentsId();
 					user.setTrendingConversationObject(trendingId);	
@@ -260,7 +360,11 @@
 					}
 					_displayTrendingCommentsBy(trendingId);
 					var navConf = {
-						nrOfUpDates: '['+unReadItems+']'
+						nrOfUpDates: '['+unReadItems+']',
+						allconversations: mainViewConfig.CONVERSATIONS,
+						peoplesView: mainViewConfig.ALLPEOPLESVIEW,
+						aboutMe: mainViewConfig.ABOUTME
+						
 					};
 					
 					var nav = ich.navigation(navConf);
@@ -279,7 +383,6 @@
 			},
 			singleConversationsView: function(conversationsId)
 			{
-				
 				$('#content').empty();
 				function _presentConversation(conversationObject){
 					
@@ -323,20 +426,76 @@
 					user.getSpecificConversationComments(conversationsId, _displayComments);	
 				}
 				user.getSpecificConversation(conversationsId, _presentConversation);
+			},
+			allConversationsView: function(){
+				$('#content').empty();
+				$('#content').append(ich.allConversationsView({}));
+				
+				var allConversations = user.getConversations();
+				allConversations.sort(sort_by('last_post_time', true, parseInt));
+				
+				function _createRowOfConversations(){
+					for(var i = 0; i < allConversations.length; i+=4){
+						rowConfig = {
+							view: mainViewConfig.SINGLECONVERSATION,
+							
+							conversationId1:allConversations[i].id,  
+				            row1Message:allConversations[i].posts[0].message,
+							who1: user.getSpecificCoWorker(allConversations[i].posts[0].author_id).sort_name,
+							time1: toLocaleDateString(allConversations[i].last_post_time),
+							
+							conversationId2:allConversations[i+1].id,  
+				            row2Message:allConversations[i+1].posts[0].message,
+							who2: user.getSpecificCoWorker(allConversations[i+1].posts[0].author_id).sort_name,
+							time2: toLocaleDateString(allConversations[i+1].last_post_time),
+							
+							conversationId3:allConversations[i+2].id,  
+				            row3Message:allConversations[i+2].posts[0].message,
+							who3: user.getSpecificCoWorker(allConversations[i+2].posts[0].author_id).sort_name,
+							time3: toLocaleDateString(allConversations[i+2].last_post_time),
+							
+							conversationId4:allConversations[i+3].id,  
+				            row4Message:allConversations[i+3].posts[0].message,
+							who4: user.getSpecificCoWorker(allConversations[i+3].posts[0].author_id).sort_name,
+							time4: toLocaleDateString(allConversations[i+3].last_post_time)
+						}
+						$('#content').append(ich.rowAllConversationsView(rowConfig));	
+					}
+				}
+				_createRowOfConversations();
 				
 				
+				//$('body').scrollSpy('refresh');
+			},
+			allPeoplesView: function(){
+				$('#content').empty();
+				$('#content').append(ich.allPeoplesView({}));
+				$('#content').append(ich.rowAllPeoplePage({}));
 				
+				var tOptions = {
+					content: 'A little test to see if we can get this text',
+					title: 'The heading!'
+				}
+				$('#test').popover({});
+				
+			},
+			singleUserView: function(){
 			},
 			projectsView: function(){
 				
 			},
 			aboutView: function(){
-				
+				$('#content').empty();
+				$('#content').append(ich.aboutView({}));
+				$('#me').popover({});
 			},
 			contactsView: function(){
 				
 			}
-		}		
+		}
+		
+		$('body > .topbar').scrollSpy()
+		
 		window.onload = function(){
 			views.mainView(mainViewConfig.TRENDINGBYCOMMENTS);
 		}
@@ -345,7 +504,7 @@
 
   </head>
   <body>
-  	<div class="topbar">
+  	<div class="topbar" data-scrollspy="scrollspy">
       <div class="topbar-inner">
         <div class="container-fluid">
           <a class="brand" href="#" onclick="views.mainView(mainViewConfig.TRENDINGBYCOMMENTS);">Chrome for Projectplace</a>

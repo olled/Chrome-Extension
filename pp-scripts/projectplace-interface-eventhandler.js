@@ -2,7 +2,10 @@
 var mainViewConfig = {
 	TRENDINGBYCOMMENTS: 'trendingByComments',
 	TRENDINGBYLIKES: 'trendingByLikes',
-	SINGLECONVERSATION: 'singleconversation'	
+	SINGLECONVERSATION: 'singleconversation',
+	CONVERSATIONS: 'allconversation',
+	ALLPEOPLESVIEW: 'allpeoplesview',
+	ABOUTME: 'aboutme'	
 }
 
 var mainViewNavigation = {
@@ -19,6 +22,19 @@ var mainViewNavigation = {
 			views.singleConversationsView(mainViewNavigation._goto);
 			return false;
 		}
+		if(mainViewNavigation._view == mainViewConfig.CONVERSATIONS){
+			views.allConversationsView();
+			return false;
+		}
+		if(mainViewNavigation._view == mainViewConfig.ALLPEOPLESVIEW){
+			views.allPeoplesView();
+			return false;
+		}
+		if(mainViewNavigation._view == mainViewConfig.ABOUTME){
+			views.aboutView();
+			return false;
+		}
+		
 	}
 }
 

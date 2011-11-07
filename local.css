@@ -24,7 +24,19 @@ body {
 	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
 	   -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
 	        box-shadow: 0 1px 2px rgba(0,0,0,.15);
-	}
+}
+
+.popover .content {
+  background-color: #ffffff;
+  padding: 9px 15px;
+  margin: 0 0 0 0;
+  -webkit-border-radius: 0 0 3px 3px;
+  -moz-border-radius: 0 0 3px 3px;
+  border-radius: 0 0 3px 3px;
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding-box;
+  background-clip: padding-box;
+}
 	
 /* Page header tweaks */
 .page-header {
@@ -101,8 +113,13 @@ body {
 	        border-left: 1px solid #eee;
 }
 .content .span10{
-	width:500px;
+	width:494px;
+	padding-right:6px;
 }
+.content .span10 button[type="like"]{
+	float:right;
+}
+
 .content .span10, .content .span4 {
 	        min-height: 500px;
 }
@@ -118,4 +135,25 @@ form .input {
 }
 form textarea.xxlarge{
 	width: 480px;
+}
+
+.content .commentsview h4{
+	line-height:20px;
+}
+
+/*All conversations view specific*/
+.content .row .span15{
+	width:152px;
+	padding: 6px;
+	
+}
+.content .row .span15:hover{
+	background-color:#FEFBF3;
+	cursor: pointer;
+}
+
+
+/*All peoples view*/
+.content .media-grid{
+	margin-left:6px;
 }
