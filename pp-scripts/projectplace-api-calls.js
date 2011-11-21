@@ -1,7 +1,6 @@
 /**
- * Class handling all call to Projectplace
- * 
- * Used from projectplace-view-controller.js
+ * @description Class handling all call to Projectplace.
+ * @constructor
  */
 
 function ProjectplaceAPICall(){
@@ -51,7 +50,10 @@ ProjectplaceAPICall.prototype.getMyFavoriteProjects = function(callback){
 	this.Send(APICALLS.USER.ME.GETMYFAVORITEPROJECTS, callback)
 	return this;
 }
-
+/**
+ * @description Get's all the coworkers for the logged in user.
+ * @param {Object} callback - the callback function for the result.
+ */
 
 ProjectplaceAPICall.prototype.getMyCoWorkers = function(callback){
 	this.Send(APICALLS.USER.ME.GETMYCOWORKERS ,callback);
@@ -87,6 +89,4 @@ ProjectplaceAPICall.prototype.getUserImageHref = function(userid, callback){
 	callback(APICALLS.USER.USERS.USERIMAGE.replace('USER_ID', userid).replace('ACCESS_TOKEN',accessToken));
 	
 }
-
-
 
