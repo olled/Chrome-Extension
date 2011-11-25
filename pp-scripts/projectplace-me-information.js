@@ -1,3 +1,6 @@
+
+var localStorage = (localStorage?localStorage:{});
+
 /**
  * @description Create the logged in user object 
  * @constructor
@@ -205,6 +208,7 @@ UserInfo.prototype.setTrendingConversationObject = function(convId){
  * has the highest number of comments.
  */
 UserInfo.prototype.getTrendingConversation = function(){
+	console.log(this.userTrendingConv);
 	return JSON.parse(localStorage[this.userTrendingConv]);
 };
 

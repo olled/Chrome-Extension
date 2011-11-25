@@ -1,3 +1,6 @@
+var oauth = (oauth ? oauth:{});
+var APICALLS = (APICALLS ? APICALLS:{});
+var localStorage = (localStorage ? localStorage:{});
 /**
  * @description Class handling all call to Projectplace.
  * @constructor
@@ -21,7 +24,7 @@ ProjectplaceAPICall.prototype.Send = function(call, callback, method){
 		'method': (method?method:'GET')
 	};
 	return oauth.sendSignedRequest(url, callback, request);
-}
+};
 
 /**
  * Get a specific users profile  
@@ -29,8 +32,8 @@ ProjectplaceAPICall.prototype.Send = function(call, callback, method){
  */
 ProjectplaceAPICall.prototype.getMyProfile = function(callback){
 	this.Send(APICALLS.USER.ME.GETMYPROFILE,callback);
-	return this
-}
+	return this;
+};
 
 /**
  * Get all the users Projects  
@@ -38,18 +41,17 @@ ProjectplaceAPICall.prototype.getMyProfile = function(callback){
  */
 ProjectplaceAPICall.prototype.getMyProjects = function(callback){
 	this.Send(APICALLS.USER.ME.GETMYPROJECTS,callback);
-	return this
-}
+	return this;
+};
 
 /**
  * Get the users favorite projects  
  * @param {Object} callback - specific callback function to handle the result
  */
 ProjectplaceAPICall.prototype.getMyFavoriteProjects = function(callback){
-	
-	this.Send(APICALLS.USER.ME.GETMYFAVORITEPROJECTS, callback)
+	this.Send(APICALLS.USER.ME.GETMYFAVORITEPROJECTS, callback);
 	return this;
-}
+};
 /**
  * @description Get's all the coworkers for the logged in user.
  * @param {Object} callback - the callback function for the result.
@@ -57,8 +59,8 @@ ProjectplaceAPICall.prototype.getMyFavoriteProjects = function(callback){
 
 ProjectplaceAPICall.prototype.getMyCoWorkers = function(callback){
 	this.Send(APICALLS.USER.ME.GETMYCOWORKERS ,callback);
-	return this
-}
+	return this;
+};
 /**
  * Get projects conversations  
  * @param {Object} callback - specific callback function to handle the result
@@ -66,8 +68,8 @@ ProjectplaceAPICall.prototype.getMyCoWorkers = function(callback){
  */
 ProjectplaceAPICall.prototype.projectConversations = function(projectId, callback){
 	this.Send(APICALLS.PROJECTS.CONVERSATIONS.replace('PROJECT_ID', projectId),callback);
-	return this
-}
+	return this;
+};
 
 /**
  * Get specific conversation  
@@ -76,8 +78,7 @@ ProjectplaceAPICall.prototype.projectConversations = function(projectId, callbac
  */
 ProjectplaceAPICall.prototype.specificConversation = function(conversationId, callback){
 	return this.Send(APICALLS.CONVERSATIONS.SPECIFICCONVERSATION.replace('CONVERSATION_ID', conversationId),callback);
-	
-}
+};
 
 /**
  * Get user image href
