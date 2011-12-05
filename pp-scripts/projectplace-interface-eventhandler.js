@@ -18,7 +18,7 @@ var mainViewNavigation = {
 		mainViewNavigation._handleView();
 	},
 	_handleView: function(){
-		console.log(mainViewNavigation._view)
+		
 		if(mainViewNavigation._view == mainViewConfig.SINGLECONVERSATION){
 			views.singleConversationsView(mainViewNavigation._goto);
 			return false;
@@ -36,7 +36,6 @@ var mainViewNavigation = {
 			return false;
 		}
 		if(mainViewNavigation._view == mainViewConfig.SINGLEPERSONVIEW){
-			console.log(mainViewNavigation._goto);
 			views.singlePersonView(mainViewNavigation._goto);
 			return false;
 		}

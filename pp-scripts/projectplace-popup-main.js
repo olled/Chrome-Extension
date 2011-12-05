@@ -220,8 +220,10 @@ var views = {
 					who4: user.getSpecificCoWorker(allConversations[i+3].posts[0].author_id).sort_name,
 					time4: toLocaleDateString(allConversations[i+3].last_post_time)
 				}
+				
 				$('#content').append(ich.rowAllConversationsView(rowConfig));	
 			}
+			
 		}
 		_createRowOfConversations();
 		
@@ -263,7 +265,7 @@ var views = {
 				$('#content').append(ich.rowAllPeoplePage(rowConfig));
 			}
 			catch(e){
-				console.log(i);
+				console.log('Error in allPeoplesView ' + e);
 			}
 		}
 		

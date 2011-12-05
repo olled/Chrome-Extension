@@ -1,12 +1,12 @@
-var oauth = (oauth ? oauth:{});
-var APICALLS = (APICALLS ? APICALLS:{});
-var localStorage = (localStorage ? localStorage:{});
+/*jslint browser: true, indent:4 */
+/*global oauth, APICALLS, localStorage, CONFIG */
+
 /**
  * @description Class handling all call to Projectplace.
  * @constructor
  */
 
-function ProjectplaceAPICall(){
+function ProjectplaceAPICall() {
 	return this;
 }
 
@@ -18,10 +18,10 @@ function ProjectplaceAPICall(){
  * @param {Object} callback - The callback function to call after loading data.
  * @param {Object} method - GET/POST
  */
-ProjectplaceAPICall.prototype.Send = function(call, callback, method){
+ProjectplaceAPICall.prototype.Send = function (call, callback, method) {
 	var url = call;
 	var request = {
-		'method': (method?method:'GET')
+		'method': (method ? method:'GET')
 	};
 	return oauth.sendSignedRequest(url, callback, request);
 };
@@ -30,8 +30,8 @@ ProjectplaceAPICall.prototype.Send = function(call, callback, method){
  * Get a specific users profile  
  * @param {Object} callback - specific callback function to handle the result
  */
-ProjectplaceAPICall.prototype.getMyProfile = function(callback){
-	this.Send(APICALLS.USER.ME.GETMYPROFILE,callback);
+ProjectplaceAPICall.prototype.getMyProfile = function (callback) {
+	this.Send(APICALLS.USER.ME.GETMYPROFILE, callback);
 	return this;
 };
 
@@ -39,8 +39,8 @@ ProjectplaceAPICall.prototype.getMyProfile = function(callback){
  * Get all the users Projects  
  * @param {Object} callback - specific callback function to handle the result
  */
-ProjectplaceAPICall.prototype.getMyProjects = function(callback){
-	this.Send(APICALLS.USER.ME.GETMYPROJECTS,callback);
+ProjectplaceAPICall.prototype.getMyProjects = function (callback) {
+	this.Send(APICALLS.USER.ME.GETMYPROJECTS, callback);
 	return this;
 };
 
@@ -48,7 +48,7 @@ ProjectplaceAPICall.prototype.getMyProjects = function(callback){
  * Get the users favorite projects  
  * @param {Object} callback - specific callback function to handle the result
  */
-ProjectplaceAPICall.prototype.getMyFavoriteProjects = function(callback){
+ProjectplaceAPICall.prototype.getMyFavoriteProjects = function (callback) {
 	this.Send(APICALLS.USER.ME.GETMYFAVORITEPROJECTS, callback);
 	return this;
 };
@@ -57,8 +57,8 @@ ProjectplaceAPICall.prototype.getMyFavoriteProjects = function(callback){
  * @param {Object} callback - the callback function for the result.
  */
 
-ProjectplaceAPICall.prototype.getMyCoWorkers = function(callback){
-	this.Send(APICALLS.USER.ME.GETMYCOWORKERS ,callback);
+ProjectplaceAPICall.prototype.getMyCoWorkers = function (callback) {
+	this.Send(APICALLS.USER.ME.GETMYCOWORKERS, callback);
 	return this;
 };
 /**
@@ -66,8 +66,8 @@ ProjectplaceAPICall.prototype.getMyCoWorkers = function(callback){
  * @param {Object} callback - specific callback function to handle the result
  * @param {String} projectId - specific project id.
  */
-ProjectplaceAPICall.prototype.projectConversations = function(projectId, callback){
-	this.Send(APICALLS.PROJECTS.CONVERSATIONS.replace('PROJECT_ID', projectId),callback);
+ProjectplaceAPICall.prototype.projectConversations = function (projectId, callback) {
+	this.Send(APICALLS.PROJECTS.CONVERSATIONS.replace('PROJECT_ID', projectId), callback);
 	return this;
 };
 
@@ -76,8 +76,8 @@ ProjectplaceAPICall.prototype.projectConversations = function(projectId, callbac
  * @param {Object} callback - specific callback function to handle the result
  * @param {String} projectId - specific conversation id.
  */
-ProjectplaceAPICall.prototype.specificConversation = function(conversationId, callback){
-	return this.Send(APICALLS.CONVERSATIONS.SPECIFICCONVERSATION.replace('CONVERSATION_ID', conversationId),callback);
+ProjectplaceAPICall.prototype.specificConversation = function (conversationId, callback) {
+	return this.Send(APICALLS.CONVERSATIONS.SPECIFICCONVERSATION.replace('CONVERSATION_ID', conversationId), callback);
 };
 
 /**
@@ -85,9 +85,8 @@ ProjectplaceAPICall.prototype.specificConversation = function(conversationId, ca
  * @param {Object} callback - specific callback function to handle the result
  * @param {String} userid - specific user id.
  */
-ProjectplaceAPICall.prototype.getUserImageHref = function(userid, callback){
-	var accessToken = localStorage['oauth_token'+CONFIG.APIURL];
-	callback(APICALLS.USER.USERS.USERIMAGE.replace('USER_ID', userid).replace('ACCESS_TOKEN',accessToken));
-	
-}
+ProjectplaceAPICall.prototype.getUserImageHref = function (userid, callback) {
+	var accessToken = localStorage['oauth_token' + CONFIG.APIURL];
+	callback(APICALLS.USER.USERS.USERIMAGE.replace('USER_ID', userid).replace('ACCESS_TOKEN', accessToken));
+};
 

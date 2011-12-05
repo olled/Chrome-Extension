@@ -1,5 +1,5 @@
-
-var localStorage = (localStorage?localStorage:{});
+/*jslint browser: true, indent:4 */
+/*global oauth, APICALLS, localStorage, CONFIG */
 
 /**
  * @description Create the logged in user object 
@@ -170,7 +170,8 @@ UserInfo.prototype.getTrendingConversationOnCommentsId = function(){
  */
 UserInfo.prototype.getTrendingConversationOnLikesId = function(){
 	
-	var highestCount, currentCount = 0;
+	var highestCount = 0; 
+	var currentCount = 0;
 	var conversationsObject = null;
 	var conversations = this.getConversations();
 	
@@ -189,10 +190,9 @@ UserInfo.prototype.getTrendingConversationOnLikesId = function(){
 			}
 		}
 	}
-	
 	return (conversationsObject ?conversationsObject.id : null);
-	
 };
+
 /**
  * Save the Trending Conversation to the localstorage
  * @param {Object} convId - the specific id of the conversation to save
@@ -208,7 +208,6 @@ UserInfo.prototype.setTrendingConversationObject = function(convId){
  * has the highest number of comments.
  */
 UserInfo.prototype.getTrendingConversation = function(){
-	console.log(this.userTrendingConv);
 	return JSON.parse(localStorage[this.userTrendingConv]);
 };
 

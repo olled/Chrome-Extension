@@ -15,24 +15,28 @@
 <script language="javascript" type="text/javascript">
 	
 	/**
-	 * Called from injected.js when the oauth process have been verified.
-	 * Only called from https://service.projectplace.com/domBlank.html
-	 * 		- Closes the oauth request tab down, and calls the init method to get the data.
-	 */
-
+	* Called from injected.js when the oauth process have been verified.
+	* Only called from https://service.projectplace.com/domBlank.html
+	*	- Closes the oauth request tab down, and calls the init method to get the data.
+	*/
+	var ProjectplaceViewController = (ProjectplaceViewController?ProjectplaceViewController:{});
 	var ViewController = ProjectplaceViewController;
+	var oauth = (oauth ? oauth:{});
+	var chrome = (chrome?chrome:{});
+	var ChromeExOAuth = (ChromeExOAuth?ChromeExOAuth:{});
+	var CONFIG = (CONFIG?CONFIG:{});
 	
 	chrome.extension.onRequest.addListener(function (request, sender, sendResponse) {
         if (request.target) {
-            switch (request.target) {
-                case "saveOauthCredentials": 
-					oauth.getAccessToken(request.oauthToken, request.oauthVerifier,function(){
-						chrome.tabs.getSelected(null, function (tab) {
-						    chrome.tabs.remove(tab.id);
-						});
-						ViewController.loadDataInitialView();
-					})
-					return false;
+            if (request.target) {
+                //case "saveOauthCredentials": 
+				oauth.getAccessToken(request.oauthToken, request.oauthVerifier,function(){
+					chrome.tabs.getSelected(null, function (tab) {
+						chrome.tabs.remove(tab.id);
+					});
+					ViewController.loadDataInitialView();
+				});
+				return false;
             }
          }
 	});
@@ -56,20 +60,21 @@
 	 * @param {Object} oauthToken
 	 * @param {Object} oauthVerifier
 	 */
-	var viewControll = null;
 	function onAuthorized(oauthToken, oauthVerifier)
 	{
 		ViewController.loadDataInitialView();
 	}
 	oauth.authorize(onAuthorized);
 	
-	
+	/**
+	 * Return the set ViewController object.
+	 */
 	function getViewControll(){
-		
 		return ViewController;
 	}
 	
 </script>
+<title>background</title>
 </head>
 <body >
 </body>
