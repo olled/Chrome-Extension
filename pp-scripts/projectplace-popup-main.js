@@ -84,11 +84,11 @@ var views = {
 		$('#singleConversationsCommentsRow').empty();
 		for (var i = 0; i < comments.length - 1; i++) {
 			var singleConf = {
-				message: convertCharactersToSpaces(comments[i].message),
+				message: comments[i].message,
 				who: user.getSpecificCoWorker(comments[i].author_id).sort_name,
 				time: toLocaleDateString(comments[i].created_time)
 			};
-			$('#singleConversationsCommentsRow').append(ich.singleNavigationPost(singleConf));
+			$('#singleConversationsCommentsRow').newLineAppend(ich.singleNavigationPost(singleConf));
 		}
 		runSpinner.close();
 	},
@@ -117,7 +117,6 @@ var views = {
 				conversationId: conversationObject.id,
 				conversationAction: singleViewActions.CREATECOMMENT
 			};
-			console.log(singleNavConf);
 			var singelNavigation = ich.singleNavigation(singleNavConf);
 			$('#content').append(singelNavigation);
 			
@@ -160,7 +159,7 @@ var views = {
 					time4: toLocaleDateString(allConversations[i + 3].last_post_time)
 				};
 				
-				$('#content').append(ich.rowAllConversationsView(rowConfig));	
+				$('#content').newLineAppend(ich.rowAllConversationsView(rowConfig));	
 			}
 			
 		}
@@ -284,7 +283,7 @@ var views = {
 					rowConfig.time4 = toLocaleDateString(userConversations[i + 3].last_post_time);
 				}
 				
-				$('#content').append(ich.rowAllConversationsView(rowConfig));
+				$('#content').newLineAppend(ich.rowAllConversationsView(rowConfig));
 			}
 		}
 		else {
@@ -322,7 +321,7 @@ function _showTrendingObject(view, trendingId) {
 		var trendingObject = user.getTrendingConversation();
 		var coworker = user.getSpecificCoWorker(trendingObject.posts[0].author_id);
 		var lastPost = toLocaleDateString(trendingObject.last_post_time);
-		$('#trendingPost').html(trendingObject.posts[0].message);
+		$('#trendingPost').newLineHtml(trendingObject.posts[0].message);
 		$('#trendingWhoUpdatesDates').html(coworker.sort_name + ' || Nr of Comments: ' + (trendingObject.post_count - 1) + ' - ' + lastPost);
 		
 		document.getElementById('getInvolved').setAttribute('goto', trendingId);
