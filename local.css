@@ -162,3 +162,10 @@ form textarea.xxlarge{
 	height: 90px;
 	width: 90px;
 }
+
+/*
+	Multi user view
+*/
+.page-header .head-search{
+	float:right;
+}

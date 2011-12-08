@@ -1,5 +1,5 @@
 /*jslint browser: true, indent: 4 */
-/*global jQuery, chrome*/
+/*global jQuery, chrome, $*/
 
 
 /**
@@ -30,6 +30,34 @@ function clearBadgeText() {
 	});
 }
 
+
+
+var userSearch = {
+	searchBoxId : '',
+	run: function (e) {
+		userSearch.searchBoxId =  e.srcElement.id;
+		userSearch._kickIt();	
+	},
+	_kickIt : function () {
+		var trigger = $('#' + userSearch.searchBoxId);
+		var searchVal = trigger.val();
+		userSearch._getAllATags(searchVal);
+	},
+	_getAllATags : function (searchVal) {
+		var aTags = document.getElementsByTagName('a');
+		var aImageTags = [];
+		for (var i = 0; i < aTags.length; i++) {
+			if (aTags[i].getAttribute('data-original-title') && aTags[i].getAttribute('data-original-title').toLowerCase().indexOf(searchVal) == -1) {
+				aTags[i].style.display = 'none';
+			}
+			else {
+				aTags[i].style.display = '';
+			}
+		}
+		
+	}
+	
+};
 /**
  * New jQuery function that replaces \n with <br> tags and 
  * then calls the $.append function. 

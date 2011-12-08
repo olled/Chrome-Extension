@@ -38,6 +38,7 @@ var runSpinner = {
 };
 
 var views = {
+	currentAllConversationsRowCount: 0,
 	mainView: function (trendingBy) {
 		runSpinner.run();
 		var trendingId = null;
@@ -85,6 +86,8 @@ var views = {
 		for (var i = 0; i < comments.length - 1; i++) {
 			var singleConf = {
 				message: comments[i].message,
+				singlePersonView: mainViewConfig.SINGLEPERSONVIEW,
+				authorId: comments[i].author_id,
 				who: user.getSpecificCoWorker(comments[i].author_id).sort_name,
 				time: toLocaleDateString(comments[i].created_time)
 			};
@@ -109,6 +112,8 @@ var views = {
 			
 			var singleNavConf = {
 				authorName: coworker.sort_name,
+				singlePersonView: mainViewConfig.SINGLEPERSONVIEW,
+				authorId: coworker.id,
 				organisation: coworker.organisation_name,
 				title: coworker.title,
 				lastPost: lastPost,
@@ -159,7 +164,7 @@ var views = {
 					time4: toLocaleDateString(allConversations[i + 3].last_post_time)
 				};
 				
-				$('#content').newLineAppend(ich.rowAllConversationsView(rowConfig));	
+				$('#content').append(ich.rowAllConversationsView(rowConfig));	
 			}
 			
 		}
@@ -216,7 +221,7 @@ var views = {
 				});
 			}
 		}
-		
+		$('#searchUsers').focus();
 		$(".media-grid > li > a").popover({});
 		
 	},
@@ -283,7 +288,7 @@ var views = {
 					rowConfig.time4 = toLocaleDateString(userConversations[i + 3].last_post_time);
 				}
 				
-				$('#content').newLineAppend(ich.rowAllConversationsView(rowConfig));
+				$('#content').append(ich.rowAllConversationsView(rowConfig));
 			}
 		}
 		else {
@@ -322,7 +327,7 @@ function _showTrendingObject(view, trendingId) {
 		var coworker = user.getSpecificCoWorker(trendingObject.posts[0].author_id);
 		var lastPost = toLocaleDateString(trendingObject.last_post_time);
 		$('#trendingPost').newLineHtml(trendingObject.posts[0].message);
-		$('#trendingWhoUpdatesDates').html(coworker.sort_name + ' || Nr of Comments: ' + (trendingObject.post_count - 1) + ' - ' + lastPost);
+		$('#trendingWhoUpdatesDates').html('<a href="#" view="'+ mainViewConfig.SINGLEPERSONVIEW +'" goto="'+coworker.id+'" onclick="mainViewNavigation.go(event);">' + coworker.sort_name + '</a> || Nr of Comments: ' + (trendingObject.post_count - 1) + ' - ' + lastPost);
 		
 		document.getElementById('getInvolved').setAttribute('goto', trendingId);
 	}

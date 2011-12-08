@@ -28,33 +28,33 @@ var PPAPI = new ProjectplaceAPICall();
 		 */
 		PPAPI.getMyProfile(function(text, xhr){
 			ProjectplaceViewController.user = new UserInfo(text);
-		});
-		
-		/**
-		 * Gets the data for all User projects.
-		 * Gets top 50 conversations for all projects ordered by last modified.
-		 * @param {Object} txt - json text
-		 * @param {Object} xhr - the xhr object
-		 */
-		PPAPI.getMyProjects(function(text, xhr){
-			var projects = JSON.parse(text);
-			ProjectplaceViewController.user.saveProjects(projects);
-			for (var i = 0; i < projects.length; i++) {
-				PPAPI.projectConversations(projects[i].id,function(t, xhr){
-					ProjectplaceViewController.user.setConversations(t);
-				}
-				);
-			}
-		});
-		/**
-		 * Get all coworkers for logged in user
-		 * @param {Object} text - JSONText
-		 * @param {Object} xhr - xhr object
-		 */
-		PPAPI.getMyCoWorkers(function(text,xhr){
-			var coworkers = JSON.parse(text);
-			ProjectplaceViewController.user.saveCoworkers(coworkers);
 			
+			/**
+			 * Gets the data for all User projects.
+			 * Gets top 50 conversations for all projects ordered by last modified.
+			 * @param {Object} txt - json text
+			 * @param {Object} xhr - the xhr object
+			 */
+			PPAPI.getMyProjects(function(text, xhr){
+				var projects = JSON.parse(text);
+				ProjectplaceViewController.user.saveProjects(projects);
+				for (var i = 0; i < projects.length; i++) {
+					PPAPI.projectConversations(projects[i].id,function(t, xhr){
+							ProjectplaceViewController.user.setConversations(t);
+						}
+					);
+				}
+				/**
+				 * Get all coworkers for logged in user
+				 * @param {Object} text - JSONText
+				 * @param {Object} xhr - xhr object
+				 */
+				PPAPI.getMyCoWorkers(function(text,xhr){
+					var coworkers = JSON.parse(text);
+					ProjectplaceViewController.user.saveCoworkers(coworkers);
+					
+				});
+			});
 		});		
 	}
  }
