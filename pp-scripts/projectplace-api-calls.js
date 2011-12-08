@@ -18,10 +18,12 @@ function ProjectplaceAPICall() {
  * @param {Object} callback - The callback function to call after loading data.
  * @param {Object} method - GET/POST
  */
-ProjectplaceAPICall.prototype.Send = function (call, callback, method) {
+ProjectplaceAPICall.prototype.Send = function (call, callback, method, message) {
 	var url = call;
 	var request = {
-		'method': (method ? method:'GET')
+		'method': (method ? method:'GET'),
+		'parameters':  (message ? message:''),
+		'headers': {'Content-Type' : 'application/x-www-form-urlencoded'} 
 	};
 	return oauth.sendSignedRequest(url, callback, request);
 };
@@ -76,9 +78,20 @@ ProjectplaceAPICall.prototype.projectConversations = function (projectId, callba
  * @param {Object} callback - specific callback function to handle the result
  * @param {String} projectId - specific conversation id.
  */
-ProjectplaceAPICall.prototype.specificConversation = function (conversationId, callback) {
-	return this.Send(APICALLS.CONVERSATIONS.SPECIFICCONVERSATION.replace('CONVERSATION_ID', conversationId), callback);
+ProjectplaceAPICall.prototype.getSpecificConversation = function (conversationId, callback) {
+	return this.Send(APICALLS.CONVERSATIONS.GETSPECIFICCONVERSATION.replace('CONVERSATION_ID', conversationId), callback);
 };
+
+/**
+ * @param {Number} conversationId - The id of the specific conversation to add a comment to
+ * @param {String} message - The text to be sent as comment
+ * @param {Object} callback - The callback function after Post 
+ */
+ProjectplaceAPICall.prototype.newSpecificConversationComment = function (conversationId, message, callback) {
+	var params = 'text=' + message;  
+	return this.Send(APICALLS.CONVERSATIONS.NEWSPECIFICCONVERSATIONSCOMMENT.replace('CONVERSATION_ID', conversationId), callback, 'post', params);
+};
+
 
 /**
  * Get user image href

@@ -1,5 +1,6 @@
 /*jslint browser: true, indent:4 */
-/*global oauth, APICALLS, localStorage, CONFIG */
+/*global localStorage, oauth, APICALLS, CONFIG, ProjectplaceAPICall */
+
 
 /**
  * @description Create the logged in user object 
@@ -199,7 +200,7 @@ UserInfo.prototype.getTrendingConversationOnLikesId = function(){
  */
 UserInfo.prototype.setTrendingConversationObject = function(convId){
 	var apiCall = new ProjectplaceAPICall();
-	apiCall.specificConversation(convId, function(t, xhr){
+	apiCall.getSpecificConversation(convId, function(t, xhr){
 		localStorage['-trending-conv'] = t;		
 	});
 };
@@ -283,8 +284,9 @@ UserInfo.prototype.getSpecificConversation = function(convId, callback){
  */
 UserInfo.prototype.getSpecificConversationComments = function(convId, callback){
 	var apiCall = new ProjectplaceAPICall();
-	apiCall.specificConversation(convId, callback);
+	apiCall.getSpecificConversation(convId, callback);
 };
+
 /**
  * Gets a specific users conversations .
  * @param {Number} userId - the id of a user
@@ -301,6 +303,12 @@ UserInfo.prototype.getConversationsForSpecificUser = function(userId, callback){
 	}
 	callback(userConversations);
 };
+
+UserInfo.prototype.postConversationComment = function(convId, message, callback) {
+	var apiCall = new ProjectplaceAPICall();
+	apiCall.newSpecificConversationComment(convId, message, callback);
+}
+
 /**
  * Gets a specific coworkers image url
  * @param {Number} userid - the specific id of the user to get

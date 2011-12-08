@@ -7,14 +7,14 @@ var CONFIG = {
 	},
 	LOCALSTORAGEKEY: 'https://api.projectplace.com/1',
 	APPNAME: 'Projectplace for Chrome'
-}
+};
 
 var APICALLS = {
 	USER: {
 		ME: {
-			GETMYPROJECTS: 			CONFIG.APIURL+'/user/me/projects.json',
-			GETMYFAVORITEPROJECTS: 	CONFIG.APIURL +'/user/me/favorite-projects.json',
-			GETMYPROFILE:  			CONFIG.APIURL+'/user/me/profile.json',
+			GETMYPROJECTS:			CONFIG.APIURL+'/user/me/projects.json',
+			GETMYFAVORITEPROJECTS:	CONFIG.APIURL +'/user/me/favorite-projects.json',
+			GETMYPROFILE:			CONFIG.APIURL+'/user/me/profile.json',
 			GETMYCOWORKERS:			CONFIG.APIURL+'/user/me/coworkers.json'
 		  },
 		USERS: {
@@ -26,8 +26,10 @@ var APICALLS = {
 		
 	},
 	CONVERSATIONS: {
-		SPECIFICCONVERSATION: CONFIG.APIURL+'/conversation/CONVERSATION_ID/posts.json'
-		
+		GETSPECIFICCONVERSATION: CONFIG.APIURL + '/conversation/CONVERSATION_ID/posts.json',
+		LIKESPECIFICONVERSATION: CONFIG.APIURL + '/conversation/CONVERSATION_ID/like.json',
+		NEWSPECIFICCONVERSATIONSCOMMENT: CONFIG.APIURL + '/conversation/CONVERSATION_ID/post/create-new.json'
+
 	}
-}
+};
 

@@ -26,6 +26,9 @@ function clearBadgeText(){
 	})
 }
 
+function convertCharactersToSpaces(text) {
+	return text.replace('\n', '<p>');
+}
 /**
  * http://stackoverflow.com/questions/979256/how-to-sort-a-json-array
  * By http://stackoverflow.com/users/43089/triptych

@@ -72,7 +72,7 @@
 	<script id="aboutView" type="text/html">
 	  	<div class="row">
           <div class="page-header">
-          	<h1>About<small> - Olle Dahlstršm</small></h1>
+          	<h1>About<small> - Olle Dahlstrï¿½m</small></h1>
 	       </div>
              <div class="row">
              	
@@ -86,7 +86,7 @@
 				 </ul>
 				 </div>
 				 <div class="span8">
-					My name is Olle Dahlstršm, and I created this since I want to be able to browse conversations, 
+					My name is Olle Dahlstrï¿½m, and I created this since I want to be able to browse conversations, 
 					documents etc from Projectplace right in my browser.
 					I do not want to login, I want it where I am, in my browser.
 				<p />
@@ -133,7 +133,7 @@
 		            </span>
 	            </div>
 				<div class="actions">
-	            	<input type="submit" class="btn primary" value="Post your comment">&nbsp;<button type="reset" class="btn">Cancel</button>
+	            	<input type="button" class="btn primary" value="Post your comment" messageContainer="postComment" target="{{conversationId}}" action="{{conversationAction}}" onclick="singleConversation.go(event)">&nbsp;<button type="reset" class="btn">Cancel</button>
           		</div>
 			   </div>
 			</form>
@@ -141,7 +141,9 @@
           </div>
           <div class="span4 commentsview" id="singleConversationsComments">
             <h4>Comments</h4>
+            <div id="singleConversationsCommentsRow">
 			{{comments}}
+			</div>
           </div>
         </div>
 	</script>
