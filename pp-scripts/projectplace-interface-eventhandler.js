@@ -24,7 +24,7 @@ var mainViewNavigation = {
 		mainViewNavigation._handleView();
 	},
 	_handleView: function () {
-		trackGAPage(mainViewNavigation._view);
+		trackGAPage(mainViewNavigation._view + ' User: ' + user.getUserLastName() );
 		if (mainViewNavigation._view == mainViewConfig.SINGLECONVERSATION) {
 			views.singleConversationsView(mainViewNavigation._goto);
 			return false;

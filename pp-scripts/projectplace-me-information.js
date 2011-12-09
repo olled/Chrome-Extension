@@ -28,6 +28,13 @@ UserInfo.prototype.getUserName = function(){
 };
 
 /**
+ * Returns the user last name
+ */
+UserInfo.prototype.getUserLastName = function(){
+	return this.getJSONValue(this.userKey, 'last_name');
+};
+
+/**
  * Saves the user information(json string) to local storage.
  * @param {Object} _json - The JSON string as text
  */
