@@ -1,7 +1,6 @@
 /*jslint browser: true, indent: 4 */
 /*global jQuery, chrome, $*/
 
-
 /**
  * Takes a milli sec string form the API's, and converts it to a valid
  * javascript date/millisec string.
@@ -12,7 +11,6 @@ function toLocaleDateString(msec) {
 	return new Date(createValidDate).toLocaleDateString();
 }
 
-
 function setNewBadge(numberToUpdate) {
 	chrome.browserAction.setBadgeText({
 		text: numberToUpdate.toString()
@@ -21,6 +19,7 @@ function setNewBadge(numberToUpdate) {
 		title: "You have " + numberToUpdate + " unread wall posts"
 	});
 }
+
 function clearBadgeText() {
 	chrome.browserAction.setBadgeText({
 		text: ''

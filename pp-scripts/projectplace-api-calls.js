@@ -68,8 +68,14 @@ ProjectplaceAPICall.prototype.getMyCoWorkers = function (callback) {
  * @param {Object} callback - specific callback function to handle the result
  * @param {String} projectId - specific project id.
  */
-ProjectplaceAPICall.prototype.projectConversations = function (projectId, callback) {
-	this.Send(APICALLS.PROJECTS.CONVERSATIONS.replace('PROJECT_ID', projectId), callback);
+ProjectplaceAPICall.prototype.projectConversations = function (projectId, callback, _time) {
+	var message = {};
+	console.log(_time);
+	if (_time) {
+		message = {'newer_than': _time};
+	}
+
+	this.Send(APICALLS.PROJECTS.CONVERSATIONS.replace('PROJECT_ID', projectId), callback, 'GET', message);
 	return this;
 };
 

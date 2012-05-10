@@ -30,20 +30,19 @@ var ProjectplaceViewController = {
 		PPAPI.getMyProfile(function (text, xhr) {
 			ProjectplaceViewController.user = new UserInfo(text);
 		
-		/**
-		* Gets the data for all User projects.
-		* Gets top 50 conversations for all projects ordered by last modified.
-		* @param {Object} txt - json text
-		* @param {Object} xhr - the xhr object
-		*/
+			/**
+			* Gets the data for all User projects.
+			* Gets top 50 conversations for all projects ordered by last modified.
+			* @param {Object} txt - json text
+			* @param {Object} xhr - the xhr object
+			*/
 			PPAPI.getMyProjects(function (text, xhr) {
 				var projects = JSON.parse(text);
 				ProjectplaceViewController.user.saveProjects(projects);
 				for (var i = 0; i < projects.length; i++) {
 					PPAPI.projectConversations(projects[i].id, function (t, xhr) {
 							ProjectplaceViewController.user.setConversations(t);
-						}
-					);
+						});
 				}
 				/**
 				* Get all coworkers for logged in user
