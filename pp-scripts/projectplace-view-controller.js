@@ -30,6 +30,10 @@ var ProjectplaceViewController = {
 		*/
 		PPAPI.getMyProfile(function (text, xhr) {
 			ProjectplaceViewController.user = new UserInfo(text);
+<<<<<<< HEAD
+=======
+		
+>>>>>>> e8bb9ac20ba418e94bf161290f1b29d608251a03
 			/**
 			* Gets the data for all User projects.
 			* Gets top 50 conversations for all projects ordered by last modified.

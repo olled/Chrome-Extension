@@ -70,6 +70,10 @@ ProjectplaceAPICall.prototype.getMyCoWorkers = function (callback) {
  */
 ProjectplaceAPICall.prototype.projectConversations = function (projectId, callback, _time) {
 	var message = {};
+<<<<<<< HEAD
+=======
+	console.log(_time);
+>>>>>>> e8bb9ac20ba418e94bf161290f1b29d608251a03
 	if (_time) {
 		message = {'newer_than': _time};
 	}

@@ -149,6 +149,30 @@ UserInfo.prototype.setConversations = function(jsonText){
 	}
 };
 
+UserInfo.prototype.getLastSavedTime = function (){
+	return localStorage[this.lastSaveOfData];
+}
+UserInfo.prototype.setLastSavedTime = function (secs){
+	localStorage[this.lastSaveOfData] = secs;
+}
+
+/**
+ * Updates all project conversations based on the time stamp in this.lastSaveOfData
+ */
+UserInfo.prototype.updateConversations = function(){
+	var projects = this.getJSONValue(this.userProjects);
+	var _time = this.getLastSavedTime();
+	var newConversationsCount = 0;
+	for (var i = 0; i < projects.length; i++) {
+		PPAPI.projectConversations(projects[i].id,  function (t, xhr) {
+				if(t) {
+					ProjectplaceViewController.user.setConversations(t);
+				}
+				
+			}, _time);
+	}	
+}
+
 /**
  * Returns the last time we went to the server
  */

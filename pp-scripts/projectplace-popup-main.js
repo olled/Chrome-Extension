@@ -7,6 +7,11 @@ clearBadgeText();
 var background = chrome.extension.getBackgroundPage();
 var user = background.getViewControll().user;
 
+<<<<<<< HEAD
+=======
+var unixTime = Math.round(+new Date()/1000);		
+user.setLastSavedTime(unixTime);
+>>>>>>> e8bb9ac20ba418e94bf161290f1b29d608251a03
 
 function removeAllPopovers() {
 	var all = document.getElementsByTagName('*');
