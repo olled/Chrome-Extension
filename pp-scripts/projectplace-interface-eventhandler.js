@@ -47,7 +47,6 @@ var mainViewNavigation = {
 		}
 	}
 };
-
 var singleConversation = {
 	go: function (e) {
 		singleConversation._target = e.srcElement.getAttribute('target');

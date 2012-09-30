@@ -7,6 +7,7 @@ clearBadgeText();
 var background = chrome.extension.getBackgroundPage();
 var user = background.getViewControll().user;
 
+
 function removeAllPopovers() {
 	var all = document.getElementsByTagName('*');
 	for (var i = 0; i < all.length; i++) {
@@ -99,7 +100,6 @@ var views = {
 	{
 		$('#content').empty();
 		function _presentConversation(conversationObject) {
-			
 			var coworker = user.getSpecificCoWorker(conversationObject.posts[0].author_id);
 	
 			var lastPost = toLocaleDateString(conversationObject.last_post_time);

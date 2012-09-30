@@ -1,4 +1,5 @@
 {
+  "manifest_version": 2,
   "name": "Projectplace",
   "version": "2.0",
   "description": "Get your Conversations, Documents, Contacts and Assignments from Projectplace. This is not an official Projectplace App!",
@@ -7,7 +8,9 @@
 	"popup": "popup.html"
 	
   },
-  "background_page": "background.html",
+  "background": {
+    "page": "background.html"
+  },
   "icons": { "16": "icon-16.png",
            "48": "icon-48.png",
           "128": "icon-128.png" },

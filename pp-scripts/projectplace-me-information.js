@@ -1,5 +1,5 @@
 /*jslint browser: true, indent:4 */
-/*global localStorage, oauth, APICALLS, CONFIG, ProjectplaceAPICall */
+/*global localStorage, oauth, APICALLS, CONFIG, ProjectplaceAPICall, setNewBadge */
 
 
 /**
@@ -8,17 +8,23 @@
  * @param {Object} jsonText - raw jsontext gotten through the api
  */
 function UserInfo(jsonText){
-	
-	var _json = JSON.parse(jsonText);
+	try{
+		var _json = JSON.parse(jsonText);
+		}catch(e){
+			//we have no Internet connection
+			return false;
+		}
 	this.userid = _json.id;
 	this.userKey = this.userid + '-user-json';
 	this.userConvKey = this.userid + '-user-conv';
 	this.userProjects = this.userid + '-projects';
 	this.userTrendingConv = '-trending-conv';
 	this.userCoworkers = this.userid +'-coworkers';
+	this.lastSaveOfData = this.userid +'-lastsave';
 	this._saveOldConversations();
 	this.saveUserJSON(_json);
 }
+
 
 /**
  * Returns the user full name
@@ -99,8 +105,7 @@ UserInfo.prototype.getSpecificProject = function(projectId){
 	return null;
 };
 /**
- * Called on init(on start of browser) to clear all the conversatsions data saved on client.
- *
+ * Called on init(on start of browser) and also in interval to clear all the conversation data saved on client.
  */
 UserInfo.prototype._saveOldConversations = function(){
 	var c = localStorage[this.userConvKey];
@@ -108,6 +113,13 @@ UserInfo.prototype._saveOldConversations = function(){
 		localStorage['-old' + this.userConvKey] = c;
 		localStorage.removeItem(this.userConvKey);
 	} 
+};
+
+/**
+ * Return the old conversation data.
+ */
+UserInfo.prototype._getOldConversations = function(){
+		return this.getJSONValue('-old' + this.userConvKey);
 };
 
 /**
@@ -136,6 +148,36 @@ UserInfo.prototype.setConversations = function(jsonText){
 		localStorage[this.userConvKey] = jsonText;
 	}
 };
+
+/**
+ * Returns the last time we went to the server
+ */
+UserInfo.prototype.getLastSavedTime = function (){
+	return localStorage[this.lastSaveOfData];
+}
+/**
+ * Sets the last time we went to the server
+ */
+UserInfo.prototype.setLastSavedTime = function (secs){
+	localStorage[this.lastSaveOfData] = secs;
+}
+
+/**
+ * Updates all project conversations based on the time stamp in this.lastSaveOfData
+ */
+UserInfo.prototype.updateConversations = function(){
+	var projects = this.getJSONValue(this.userProjects);
+	var _time = this.getLastSavedTime();
+	var newConversationsCount = 0;
+	for (var i = 0; i < projects.length; i++) {
+		PPAPI.projectConversations(projects[i].id,  function (t, xhr) {
+				if(t) {
+					ProjectplaceViewController.user.setConversations(t);
+				}
+				
+			}, _time);
+	}	
+}
 
 /**
  * Returns all conversations for user or project(projectId)
@@ -226,24 +268,25 @@ UserInfo.prototype.getTrendingConversation = function(){
 UserInfo.prototype.getNewConversationsCount = function(){
 	var oldHighestDate = 0;
 	var numberOfNewPosts = 0;
-	
+	var lastSavedUnixTimeStamp = this.getLastSavedTime();
 	if(!localStorage['-old'+ this.userConvKey]){
 		return 0;
 	}
-	var oldUserConversations = this.getJSONValue('-old'+ this.userConvKey);
+	//var oldUserConversations = this.getJSONValue('-old'+ this.userConvKey);
 	var newUserConversations = this.getJSONValue(this.userConvKey);
 	
 	
-	for (var i = 0; i < oldUserConversations.length; i++) {
+	/*for (var i = 0; i < oldUserConversations.length; i++) {
 	
 		if (oldHighestDate < oldUserConversations[i].last_post_time) {
 			oldHighestDate = oldUserConversations[i].last_post_time;
 		}
-	}
+	}*/
 	
-	for(var j = 0; i < newUserConversations.length; j++){
-		if (oldHighestDate < newUserConversations[j].last_post_time){
+	for(var j = 0; j < newUserConversations.length; j++){
+		if (lastSavedUnixTimeStamp < newUserConversations[j].last_post_time){
 			numberOfNewPosts++;
+			console.log(newUserConversations[j].message)
 		}
 	}
 	
