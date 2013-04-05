@@ -1,0 +1,16 @@
+<div class="hero-unit" id="trending">
+          <h1>Spotlight</h1>
+		  	<blockquote>
+				<p id="trendingPost">{{trendingpost}}.</p>
+				<small id="trendingWhoUpdatesDates"><a href="#" view="{{viewuser}}" goto="{{userid}}" onclick="mainViewNavigation.go(event);">{{ trendingwho }}</a> {{nrofupdate}} {{lastdate}}</small>
+			</blockquote>
+        </div>
+		 <p class="get-involved"><a id="getInvolved" class="btn success big" view="{{view}}" goto="{{conversationId}}" onclick="mainViewNavigation.go(event);">Get involved &raquo;</a></p>
+		  <ul class="pills small">
+			  <li class="{{commentsViewActive}}"><a href="#" onclick="return views.mainView(mainViewConfig.TRENDINGBYCOMMENTS);">By nr of comments</a></li>
+			  <li class="{{linksViewActive}}"><a href="#" onclick=" return views.mainView(mainViewConfig.TRENDINGBYLIKES);">By nr of Likes</a></li>
+		  </ul>
+		<hr />
+	  	<div class="row">
+          {{>fournew}}
+ </div>	

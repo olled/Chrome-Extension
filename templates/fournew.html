@@ -1,0 +1,291 @@
+<script id="mainView" type="text/html">
+		<div class="hero-unit" id="trending">
+          <h1>Spotlight</h1>
+		  	<blockquote>
+				<p id="trendingPost">{{trendingpost}}.</p>
+				<small id="trendingWhoUpdatesDates"><a href="#" view="{{viewuser}}" goto="{{userid}}" onclick="mainViewNavigation.go(event);">{{ trendingwho }}</a> {{nrofupdate}} {{lastdate}}</small>
+			</blockquote>
+        </div>
+		 <p class="get-involved"><a id="getInvolved" class="btn success big" view="{{view}}" goto="{{conversationId}}" onclick="mainViewNavigation.go(event);">Get involved &raquo;</a></p>
+		  <ul class="pills small">
+			  <li class="{{commentsViewActive}}"><a href="#" onclick="return views.mainView(mainViewConfig.TRENDINGBYCOMMENTS);">By nr of comments</a></li>
+			  <li class="{{linksViewActive}}"><a href="#" onclick=" return views.mainView(mainViewConfig.TRENDINGBYLIKES);">By nr of Likes</a></li>
+		  </ul>
+		<hr />
+	  	<div class="row">
+          {{>fournew}}
+        </div>	
+	</script>
+	
+	<!-- Partial via {{>fournew}} -->
+	<script id="fournew" class="partial" type="text/html">
+		<div class="span6">
+			{{conversationsOne}}
+			<p><small>{{conversationsOneWho}}</small></p>
+			<p><a class="btn" view="{{view}}" goto="{{conversationsOneId}}" onclick="mainViewNavigation.go(event);" href="#">View details &raquo;</a></p>
+		</div>
+		<div class="span5">
+			{{conversationsTwo}}
+			<p><small>{{conversationsTwoWho}}</small></p>
+			<p><a class="btn" view="{{view}}" goto="{{conversationsTwoId}}" onclick="mainViewNavigation.go(event);" href="#">View details &raquo;</a></p>
+		</div>
+		<div class="span5">
+			{{conversationsThree}}
+			<p><small>{{conversationsThreeWho}}</small></p>
+			<p><a class="btn" view="{{view}}" goto="{{conversationsThreeId}}" onclick="mainViewNavigation.go(event);" href="#">View details &raquo;</a></p>
+		</div>
+	</script>
+	
+	<!--
+		aboutView: Who am I who created this..One coll view. 
+	-->
+	<script id="aboutView" type="text/html">
+	  	<div class="row">
+          <div class="page-header">
+          	<h1>About<small> - Olle Dahlström</small></h1>
+	       </div>
+             <div class="row">
+             	
+				<div class="span3"> 
+				  <ul class="media-grid">
+				  <li>
+				    <a href="#" id="me" rel="popover" data-content="Yeah, this is me on vacation" data-original-title="Olle Dahlstrom">
+				     <img class="thumbnail" src="http://dl.dropbox.com/u/23070527/chrome-ext-img/olle.jpg" alt="Olle">
+				    </a>
+				  </li>
+				 </ul>
+				 </div>
+				 <div class="span8">
+					<p>
+						Hello, this extension is a remake of the original one found <a href="https://chrome.google.com/webstore/detail/micpglkfpngeihkojinhfkcpjmpjbcpk" target="_blank">here at the Chrome Store.</a> 
+						This new version aims to do a lot more then the previous one, but it´s still in BETA.
+					</p>
+					<p>
+						<h3>So who am I who have created it?</h3>
+						My name is Olle Dahlström, and I created this since I want to be able to browse and comment on conversations, find my project colleagues, browse documents<small>(comming)</small> 
+						from Projectplace right in my browser.
+					<p />
+					<p>
+						<h3>What can you expect</h3>
+						Just to be really clear about this, this is something I have made on my own, and have no Projectplace.com backing into is what so ever! 
+						But if you want to create something like this, head over to Projectplace API site, sign up for developer access and start hacking away!
+						<p>
+							Since this extension still is in BETA, I have not decided on if this version shall replace the old one. Feedback is gladly accepted.
+						</p>
+					</p>			
+
+					<p><small>If you see anything strange that does not work, or would like to give me some feedback(possitiv is more fun 
+					the negative) or anything, please <a href="https://bitbucket.org/olled/chrome-extension/issues?status=new&status=open" target="_blank">file a issue over at bitbucket.org </a>
+					</small></p>
+				</div>
+           </div>
+        </div>
+	 </script>
+	
+	
+	<!--
+		navigation: the main top navigation
+		<li><a href="#allprojects">Projects</a></li>
+	-->
+	<script id="navigation" type="text/html">
+		<li><a href="#allconversations" view="{{allconversations}}" goto="none" onclick="mainViewNavigation.go(event);">Conversations <span>{{ nrOfUpDates }}</span></a></li>
+		<li><a href="#allpeople" view="{{peoplesView}}" goto="none" onclick="mainViewNavigation.go(event);">People</a></li>
+        <li><a href="#about" view="{{aboutMe}}" goto="none" onclick="mainViewNavigation.go(event);">About/Contact</a></li>
+	</script>
+	
+	<!--
+		Single Conversations view
+	-->
+	<script id="singleNavigation" type="text/html">
+	 <div class="page-header">
+          <h1>Post by {{authorName}} <small>{{lastPost}}</small></h1>
+        </div>
+        <div class="row">
+          <div class="span10">
+          	<button class="btn success" type="like">Like</button>
+            {{postMessage}} 
+			<p><small>
+				<a href="#" view="{{singlePersonView}}" goto="{{authorId}}" onclick="mainViewNavigation.go(event);">{{authorName}}</a> - {{title}} {{organisation}}
+				</small>
+			</p>
+			<form>
+			  <div class="clearfix">
+		         <div class="input">
+		           <textarea class="xxlarge" id="postComment" rows="4"></textarea>
+		           <span class="help-block">
+		              Add your own saying in this matter
+		            </span>
+	            </div>
+				<div class="actions">
+	            	<input type="button" class="btn primary" value="Post your comment" messageContainer="postComment" target="{{conversationId}}" action="{{conversationAction}}" onclick="singleConversation.go(event)">&nbsp;
+	            	<button type="reset" class="btn">Cancel</button>
+          		</div>
+			   </div>
+			</form>
+          
+          </div>
+          <div class="span4 commentsview" id="singleConversationsComments">
+            <h4>Comments</h4>
+            <div id="singleConversationsCommentsRow">
+			{{comments}}
+			</div>
+          </div>
+        </div>
+	</script>
+	
+	<!--One comment in the single conversations view -->
+	<script id="singleNavigationPost" type="text/html">
+	  <div>
+	  	{{message}}
+		<p><small><a href="#" view="{{singlePersonView}}" goto="{{authorId}}" onclick="mainViewNavigation.go(event);">{{who}}</a> - {{time}}</small></p>
+	  </div>
+	  
+	 </script>
+	 
+	<!--
+		All Conversations View
+	-->
+	<script id="allConversationsView" type="text/html">
+	 	<div id="allconversations" class="page-header">
+          <h1>All Conversations<small> - found in Projectplace</small></h1>
+        </div>
+	</script>
+	
+	<!--
+		No conversations found Conversations View
+	-->
+	<script id="noConversationsFound" type="text/html">
+		<div class="row"><div class="span6"<h5><small>No conversations found</small></h5></div></div>
+	</script>
+	
+	<!--
+		One row in all Conversations View
+	-->
+	<script id="rowAllConversationsView" type="text/html">
+	<div class="row">
+	          <div class="span15" view="{{view}}" goto="{{conversationId1}}" onclick="mainViewNavigation.go(event);">
+	            {{row1Message}}
+				<p><small>{{who1}} - {{time1}}</small></p>
+	          </div>
+			  <div class="span15" view="{{view}}" goto="{{conversationId2}}" onclick="mainViewNavigation.go(event);">
+	            {{row2Message}}
+				<p><small>{{who2}} - {{time2}}</small></p>
+	          </div>
+			  <div class="span15" view="{{view}}" goto="{{conversationId3}}" onclick="mainViewNavigation.go(event);">
+	            {{row3Message}}
+				<p><small>{{who3}} - {{time3}}</small></p>
+	          </div>
+			  <div class="span15" view="{{view}}" goto="{{conversationId4}}" onclick="mainViewNavigation.go(event);">
+	            {{row4Message}}
+				<p><small>{{who4}} - {{time4}}</small></p>
+	          </div>
+		</div>
+	</script>
+	
+	<!--
+		All Peoples View heading
+	-->
+	<script id="allPeoplesView" type="text/html">
+	 	<div class="page-header">
+          <div class="head-search">
+          	<input class="medium" id="searchUsers" onkeyup="userSearch.run(event);" size="16" type="text">
+		  	<span class="help-block">Search for users</span>
+		  </div>
+		  <h1>Colleagues<small> - found in Projectplace</small></h1>
+		  
+        </div>
+	</script>
+	
+	<!--
+		One row in all Peoples View
+	-->
+	<script id="rowAllPeoplePage" type="text/html">
+	<div class="row">
+	          <ul class="media-grid">
+				  <li>
+				      <a href="#" id="{{userid1}}"  rel="popover" data-content="{{userdata1}}" data-original-title="{{username1}}">
+				      <img class="thumbnail" view="{{view}}" goto="{{userid1}}" onclick="mainViewNavigation.go(event);" src="http://placehold.it/90x90" alt="">
+				    </a>
+				  </li>
+				  <li>
+				    <a href="#" id="{{userid2}}" rel="popover" data-content="{{userdata2}}" data-original-title="{{username2}}">
+				      <img class="thumbnail" view="{{view}}" goto="{{userid2}}" onclick="mainViewNavigation.go(event);" src="http://placehold.it/90x90" alt="">
+				    </a>
+				  </li>
+				  <li>
+				    <a href="#" id="{{userid3}}" rel="popover" data-content="{{userdata3}}" data-original-title="{{username3}}">
+				      <img class="thumbnail" view="{{view}}" goto="{{userid3}}" onclick="mainViewNavigation.go(event);" src="http://placehold.it/90x90" alt="">
+				    </a>
+				  </li>
+				  <li>
+				    <a href="#" id="{{userid4}}" rel="popover" data-content="{{userdata4}}" data-original-title="{{username4}}">
+				      <img class="thumbnail" view="{{view}}" goto="{{userid4}}" onclick="mainViewNavigation.go(event);" src="http://placehold.it/90x90" alt="">
+				    </a>
+				  </li>
+				  <li>
+				    <a href="#" id="{{userid5}}" rel="popover" data-content="{{userdata5}}" data-original-title="{{username5}}">
+				      <img class="thumbnail" view="{{view}}" goto="{{userid5}}" onclick="mainViewNavigation.go(event);" src="http://placehold.it/90x90" alt="">
+				    </a>
+				  </li>
+				  <li>
+				    <a href="#" id="{{userid6}}" rel="popover" data-content="{{userdata6}}" data-original-title="{{username6}}">
+				      <img class="thumbnail" view="{{view}}" goto="{{userid6}}" onclick="mainViewNavigation.go(event);" src="http://placehold.it/90x90" alt="">
+				    </a>
+				  </li>
+				</ul>
+		</div>
+	</script>
+	
+	
+	<!--
+		Heading in single user view
+	-->
+	<script id="singlePersonHeading" type="text/html">
+	 	<div class="page-header">
+          <h1>{{userName}}<small> - {{company}}</small></h1>
+        </div>
+	</script>
+	
+	<!--
+		Content in single user view
+	-->
+	<script id="singlePersonContent" type="text/html">
+	 	<div class="row">
+			<div class="span3"> 
+				  <ul class="media-grid">
+					  <li>
+					    <a id="user-image">
+					     <img class="thumbnail" src="{{userImageSrc}}">
+					    </a>
+					  </li>
+				 </ul>
+			</div>
+			<div class="span6">
+					<address>
+						<strong>{{company}}</strong>
+						<br>
+						{{title}}
+						<br>
+						{{street}}
+						<br>
+						{{city}}
+					</address>
+			</div>
+			<div class="span6">
+				<address>
+						<br>
+						<a mailto href="mailto:{{email}}">{{email}}</a>
+						<br>
+						{{webb}}
+						<br>
+						<br>
+						{{cell}}
+						<br>
+						{{workPhone}}
+				</address>
+			</div>
+         </div>
+		 <div class="page-header">
+          	<h3>Newest Conversations<small> started by {{userName}}</small></h3>
+        </div>
+	</script>
